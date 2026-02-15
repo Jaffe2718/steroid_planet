@@ -1,0 +1,85 @@
+{
+    "type": "minecraft:entity",
+    "pools": [
+        {
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "add": false,
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "max": 1.0,
+                                "min": 0.0
+                            },
+                            "function": "minecraft:set_count"
+                        },
+                        {
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "max": 1.0,
+                                "min": 0.0
+                            },
+                            "enchantment": "minecraft:looting",
+                            "function": "minecraft:enchanted_count_increase"
+                        }
+                    ],
+                    "name": "minecraft:ender_pearl"
+                }
+            ],
+            "rolls": 1.0
+        },
+        {
+            "bonus_rolls": 0.0,
+            "conditions": [
+                {
+                    "condition": "minecraft:killed_by_player"
+                },
+                {
+                    "condition": "minecraft:random_chance",
+                    "chance": 0.2
+                }
+            ],
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:stanozolol"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:oxandrolone"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:methenolone"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:nandrolone"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:stenbolone"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:nandrolone_decanoate"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:nandrolone_phenylpropionate"
+                }
+            ],
+            "functions": [
+                {
+                    "function": "minecraft:set_count",
+                    "count": 1.0
+                }
+            ],
+            "rolls": 1
+        }
+    ],
+    "random_sequence": "minecraft:entities/enderman"
+}

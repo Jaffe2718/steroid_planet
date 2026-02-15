@@ -1,0 +1,55 @@
+{
+    "type": "minecraft:entity",
+    "random_sequence": "minecraft:entities/silverfish",
+    "pools": [
+        {
+            "bonus_rolls": 0.0,
+            "conditions": [
+                {
+                    "condition": "minecraft:killed_by_player"
+                },
+                {
+                    "condition": "minecraft:random_chance",
+                    "chance": 0.2
+                }
+            ],
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:stanozolol"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:oxandrolone"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:methenolone"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:nandrolone"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:stenbolone"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:nandrolone_decanoate"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:nandrolone_phenylpropionate"
+                }
+            ],
+            "functions": [
+                {
+                    "function": "minecraft:set_count",
+                    "count": 1.0
+                }
+            ],
+            "rolls": 1
+        }
+    ]
+}

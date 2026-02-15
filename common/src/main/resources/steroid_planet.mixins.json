@@ -1,0 +1,17 @@
+{
+    "required": true,
+    "package": "io.github.jaffe2718.steroid_planet.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "minVersion": "0.8",
+    "client": [
+        "client.gui.hud.InGameHudMixin"
+    ],
+    "mixins": [
+        "block.BlockMixin",
+        "entity.damage.DamageTypesMixin",
+        "entity.player.PlayerEntityMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

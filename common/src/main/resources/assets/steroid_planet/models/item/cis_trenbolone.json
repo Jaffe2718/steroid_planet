@@ -1,0 +1,7 @@
+{
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"particle": "steroid_planet:item/cis_trenbolone",
+		"layer0": "steroid_planet:item/cis_trenbolone"
+	}
+}
