@@ -1,0 +1,38 @@
+{
+    "parent": "steroid_planet:adventure/tech_fitness_i",
+    "criteria": {
+        "use_steroid": {
+            "conditions": {
+                "item": {
+                    "items": "#steroid_planet:steroid_i"
+                },
+                "player": {
+                    "effects": {
+                        "steroid_planet:tech_fitness": {
+                            "visible": true
+                        }
+                    }
+                }
+            },
+            "trigger": "minecraft:consume_item"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.steroid_planet.adventure.buff_on_buff.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "steroid_planet:oxymetholone"
+        },
+        "title": {
+            "translate": "advancements.steroid_planet.adventure.buff_on_buff.title"
+        }
+    },
+    "requirements": [
+        [
+            "use_steroid"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

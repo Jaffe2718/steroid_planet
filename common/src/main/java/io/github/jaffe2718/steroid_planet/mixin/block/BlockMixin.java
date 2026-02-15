@@ -1,5 +1,6 @@
 package io.github.jaffe2718.steroid_planet.mixin.block;
 
+import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
 import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
 import io.github.jaffe2718.steroid_planet.entity.effect.Effects;
 import net.minecraft.block.Block;
@@ -8,6 +9,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,6 +26,9 @@ public class BlockMixin {
             ((PlayerAttributeAccessor) player).gainMuscle((techFitness.getAmplifier() + 1.0F) * 3.0F);
         } else {
             ((PlayerAttributeAccessor) player).gainMuscle(1F);
+        }
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            ModCriteria.MUSCLE_CRITERION.trigger(serverPlayer);
         }
     }
 }

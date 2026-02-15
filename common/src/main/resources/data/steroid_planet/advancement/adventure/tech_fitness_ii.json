@@ -1,0 +1,31 @@
+{
+    "parent": "steroid_planet:adventure/tech_fitness_i",
+    "criteria": {
+        "tech_fitness_ii": {
+            "conditions": {
+                "item": {
+                    "items": "#steroid_planet:steroid_ii"
+                }
+            },
+            "trigger": "minecraft:consume_item"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.steroid_planet.adventure.tech_fitness_ii.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "steroid_planet:cis_trenbolone"
+        },
+        "title": {
+            "translate": "advancements.steroid_planet.adventure.tech_fitness_ii.title"
+        }
+    },
+    "requirements": [
+        [
+            "tech_fitness_ii"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

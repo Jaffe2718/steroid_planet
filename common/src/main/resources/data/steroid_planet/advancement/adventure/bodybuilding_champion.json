@@ -1,0 +1,33 @@
+{
+    "parent": "steroid_planet:adventure/tech_fitness_i",
+
+    "criteria": {
+        "reach_muscle_100": {
+            "trigger": "steroid_planet:muscle",
+            "conditions": {
+                "player": {},
+                "muscle": 100.0
+            }
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.steroid_planet.adventure.bodybuilding_champion.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "steroid_planet:stanozolol"
+        },
+        "title": {
+            "translate": "advancements.steroid_planet.adventure.bodybuilding_champion.title"
+        },
+        "frame": "challenge",
+        "show_toast": true
+    },
+    "requirements": [
+        [
+            "reach_muscle_100"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

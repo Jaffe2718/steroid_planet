@@ -1,5 +1,6 @@
 package io.github.jaffe2718.steroid_planet.item;
 
+import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
 import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
 import io.github.jaffe2718.steroid_planet.entity.effect.Effects;
 import net.minecraft.advancement.criterion.Criteria;
@@ -36,12 +37,13 @@ public class SteroidItem extends Item {
 
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         if (user instanceof PlayerEntity player) {
+            ((PlayerAttributeAccessor) player).lossLiverHealth(liverDamage);
             if (player instanceof ServerPlayerEntity sPlayer) {
                 Criteria.CONSUME_ITEM.trigger(sPlayer, stack);
+                ModCriteria.LIVER_HEALTH_CRITERION.trigger(sPlayer);
             }
             player.incrementStat(Stats.USED.getOrCreateStat(this));
             stack.decrementUnlessCreative(1, player);
-            ((PlayerAttributeAccessor) player).lossLiverHealth(liverDamage);
             this.applyMergeEffect(player);
             player.emitGameEvent(GameEvent.EAT);
         }

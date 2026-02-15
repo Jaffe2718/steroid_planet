@@ -1,5 +1,6 @@
 package io.github.jaffe2718.steroid_planet;
 
+import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
 import io.github.jaffe2718.steroid_planet.item.Items;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Contract;
@@ -15,6 +16,7 @@ public final class SteroidPlanet {
 
     public static void init() {
         // Write common init code here.
+        ModCriteria.init();
         Items.init();
     }
 }

@@ -1,0 +1,31 @@
+{
+    "parent": "minecraft:adventure/root",
+    "criteria": {
+        "tech_fitness_i": {
+            "conditions": {
+                "item": {
+                    "items": "#steroid_planet:steroid_i"
+                }
+            },
+            "trigger": "minecraft:consume_item"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.steroid_planet.adventure.tech_fitness_i.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "steroid_planet:stanozolol"
+        },
+        "title": {
+            "translate": "advancements.steroid_planet.adventure.tech_fitness_i.title"
+        }
+    },
+    "requirements": [
+        [
+            "tech_fitness_i"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

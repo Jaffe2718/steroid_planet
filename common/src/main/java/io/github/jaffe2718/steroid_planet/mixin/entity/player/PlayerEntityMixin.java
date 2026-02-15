@@ -1,6 +1,7 @@
 package io.github.jaffe2718.steroid_planet.mixin.entity.player;
 
 import io.github.jaffe2718.steroid_planet.SteroidPlanet;
+import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
 import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
 import io.github.jaffe2718.steroid_planet.entity.damage.ModDamageTypes;
 import io.github.jaffe2718.steroid_planet.entity.effect.Effects;
@@ -20,6 +21,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
@@ -92,6 +94,9 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
             } else {
                 this.gainMuscle(1.0F);
             }
+            if (((PlayerEntity) (Object) this) instanceof ServerPlayerEntity serverPlayer) {
+                ModCriteria.MUSCLE_CRITERION.trigger(serverPlayer);
+            }
         }
     }
 
@@ -157,6 +162,9 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                 this.gainMuscle(8.0F + (techFitness.getAmplifier() + 1.0F) * 3.0F);
             } else {
                 this.gainMuscle(8.0F);
+            }
+            if (((PlayerEntity) (Object) this) instanceof ServerPlayerEntity serverPlayer) {
+                ModCriteria.MUSCLE_CRITERION.trigger(serverPlayer);
             }
         }
         if (stack.isIn(ItemTags.LIVER_HEALING_I)) {
