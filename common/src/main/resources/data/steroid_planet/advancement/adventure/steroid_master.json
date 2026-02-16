@@ -1,0 +1,31 @@
+{
+    "parent": "steroid_planet:adventure/tech_fitness_iii",
+    "criteria": {
+        "use_9_kinds_of_steroid": {
+            "conditions": {
+                "steroid_types": 9
+            },
+            "trigger": "steroid_planet:steroid_records"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.steroid_planet.adventure.steroid_master.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:dragon_head"
+        },
+        "title": {
+            "translate": "advancements.steroid_planet.adventure.steroid_master.title"
+        },
+        "frame": "challenge",
+        "show_toast": true
+    },
+    "requirements": [
+        [
+            "use_9_kinds_of_steroid"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

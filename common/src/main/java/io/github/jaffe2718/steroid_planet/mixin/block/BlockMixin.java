@@ -28,7 +28,7 @@ public class BlockMixin {
             ((PlayerAttributeAccessor) player).gainMuscle(1F);
         }
         if (player instanceof ServerPlayerEntity serverPlayer) {
-            ModCriteria.MUSCLE_CRITERION.trigger(serverPlayer);
+            ModCriteria.MUSCLE.trigger(serverPlayer);
         }
     }
 }

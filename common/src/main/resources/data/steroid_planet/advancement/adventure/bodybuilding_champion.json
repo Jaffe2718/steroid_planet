@@ -5,7 +5,6 @@
         "reach_muscle_100": {
             "trigger": "steroid_planet:muscle",
             "conditions": {
-                "player": {},
                 "muscle": 100.0
             }
         }
@@ -16,7 +15,7 @@
         },
         "icon": {
             "count": 1,
-            "id": "steroid_planet:stanozolol"
+            "id": "steroid_planet:champion_trophy"
         },
         "title": {
             "translate": "advancements.steroid_planet.adventure.bodybuilding_champion.title"

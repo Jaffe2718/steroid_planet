@@ -24,6 +24,9 @@ public abstract class Items {
     public static final Item NANDROLONE_DECANOATE = register("nandrolone_decanoate", 3600, 0, 6.0F, UseAction.CROSSBOW);
     public static final Item NANDROLONE_PHENYLPROPIONATE = register("nandrolone_phenylpropionate", 9600, 0, 7.0F, UseAction.CROSSBOW);
 
+    // Champion Trophy
+    public static final Item CHAMPION_TROPHY = net.minecraft.item.Items.register(SteroidPlanet.id("champion_trophy"), new ChampionTrophyItem());
+
     /**
      * Register a steroid item with the given potion, liver damage, and use action.
      * @param id           The ID of the steroid item.
@@ -53,5 +56,6 @@ public abstract class Items {
             NANDROLONE_DECANOATE,
             NANDROLONE_PHENYLPROPIONATE
         );
+        CreativeTabRegistry.append(ItemGroups.INGREDIENTS, CHAMPION_TROPHY);
     }
 }

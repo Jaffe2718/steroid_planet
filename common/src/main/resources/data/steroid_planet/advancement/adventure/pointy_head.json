@@ -1,0 +1,31 @@
+{
+    "parent": "steroid_planet:adventure/tech_fitness_i",
+
+    "criteria": {
+        "liver_health_below_15": {
+            "trigger": "steroid_planet:liver_health",
+            "conditions": {
+                "liver_health": 15.0
+            }
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.steroid_planet.adventure.pointy_head.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:pointed_dripstone"
+        },
+        "title": {
+            "translate": "advancements.steroid_planet.adventure.pointy_head.title"
+        },
+        "frame": "goal"
+    },
+    "requirements": [
+        [
+            "liver_health_below_15"
+        ]
+    ],
+    "sends_telemetry_event": true
+}
