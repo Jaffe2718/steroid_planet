@@ -7,8 +7,8 @@ import net.minecraft.registry.Registry;
 
 public abstract class ModCriteria {
 
-    public static final LiverHealthCriterion LIVER_HEALTH = new LiverHealthCriterion();
-    public static final MuscleCriterion MUSCLE = new MuscleCriterion();
+
+    public static final HealthConditionCriterion HEALTH_CONDITION = new HealthConditionCriterion();
     public static final SteroidRecordsCriterion STEROID_RECORDS = new SteroidRecordsCriterion();
 
     static <T extends Criterion<?>> void register(String id, T criterion) {
@@ -16,8 +16,7 @@ public abstract class ModCriteria {
     }
 
     public static void init() {
-         register("liver_health", LIVER_HEALTH);
-         register("muscle", MUSCLE);
+         register("health_condition", HEALTH_CONDITION);
          register("steroid_records", STEROID_RECORDS);
     }
 }

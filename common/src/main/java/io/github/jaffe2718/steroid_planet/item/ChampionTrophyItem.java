@@ -39,7 +39,7 @@ public class ChampionTrophyItem extends Item {
             ((PlayerAttributeAccessor) player).gainLiverHealth(100.0F);
             if (user instanceof ServerPlayerEntity sPlayer) {
                 Criteria.CONSUME_ITEM.trigger(sPlayer, stack);
-                ModCriteria.MUSCLE.trigger(sPlayer);
+                ModCriteria.HEALTH_CONDITION.trigger(sPlayer);
             }
             player.incrementStat(Stats.USED.getOrCreateStat(this));
             stack.decrementUnlessCreative(1, player);

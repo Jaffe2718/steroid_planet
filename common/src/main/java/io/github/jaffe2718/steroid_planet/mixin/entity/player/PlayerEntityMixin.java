@@ -1,6 +1,7 @@
 package io.github.jaffe2718.steroid_planet.mixin.entity.player;
 
 import io.github.jaffe2718.steroid_planet.SteroidPlanet;
+import io.github.jaffe2718.steroid_planet.advancement.criterion.HealthConditionCriterion;
 import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
 import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
 import io.github.jaffe2718.steroid_planet.entity.damage.ModDamageTypes;
@@ -39,7 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.HashSet;
 import java.util.Set;
 
-@SuppressWarnings("ALL")
+@SuppressWarnings({"AddedMixinMembersNamePattern", "DataFlowIssue"})
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
 
@@ -100,9 +101,6 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
 
     /**
      * When the player attacks a living entity, if the player has the Tech Fitness effect, the player will gain muscle.
-     *
-     * @param target
-     * @param ci
      */
     @Inject(method = "attackLivingEntity", at = @At("RETURN"))
     private void attackLivingEntity(LivingEntity target, CallbackInfo ci) {
@@ -113,16 +111,13 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                 this.gainMuscle(1.0F);
             }
             if (((PlayerEntity) (Object) this) instanceof ServerPlayerEntity serverPlayer) {
-                ModCriteria.MUSCLE.trigger(serverPlayer);
+                ModCriteria.HEALTH_CONDITION.trigger(serverPlayer);
             }
         }
     }
 
     /**
      * When the player breaks a block, the speed of breaking the block is increased by the player's muscle.
-     *
-     * @param block
-     * @param cir
      */
     @Inject(method = "getBlockBreakingSpeed", at = @At("RETURN"), cancellable = true)
     private void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir) {
@@ -133,8 +128,6 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
      * Loss muscle every tick
      * No steroid_planet:tech_fitness effect, loss 0.01F per tick
      * With each amplifier level, the loss rate is halved.
-     *
-     * @param ci
      */
     @Inject(method = "tick", at = @At("RETURN"))
     private void tick(CallbackInfo ci) {
@@ -168,10 +161,6 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
     /**
      * When the player eats food, if the food has the liver healing tag, the player will recover liver health.
      * @see io.github.jaffe2718.steroid_planet.registry.tag.ItemTags
-     * @param world
-     * @param stack
-     * @param foodComponent
-     * @param cir
      */
     @Inject(method = "eatFood", at = @At("HEAD"))
     private void eatFood(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) {
@@ -182,7 +171,7 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                 this.gainMuscle(8.0F);
             }
             if (((PlayerEntity) (Object) this) instanceof ServerPlayerEntity serverPlayer) {
-                ModCriteria.MUSCLE.trigger(serverPlayer);
+                ModCriteria.HEALTH_CONDITION.trigger(serverPlayer);
             }
         }
         if (stack.isIn(ItemTags.LIVER_HEALING_I)) {
@@ -198,10 +187,10 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
 
     @Unique
     private void applyLiverPoisoning() {
-        if (this.getLiverHealth() < 15.0F && this.liverPoisoningTimer > 0) {
+        if (this.getLiverHealth() < HealthConditionCriterion.LIVER_HEALTH_THRESHOLD && this.liverPoisoningTimer > 0) {
             this.liverPoisoningTimer--;
         }
-        if (this.liverPoisoningTimer == 0 && this.getLiverHealth() < 15.0F) {
+        if (this.liverPoisoningTimer == 0 && this.getLiverHealth() < HealthConditionCriterion.LIVER_HEALTH_THRESHOLD) {
             ((PlayerEntity) (Object) this).damage(
                     new DamageSource(((PlayerEntity) (Object) this)
                             .getWorld()

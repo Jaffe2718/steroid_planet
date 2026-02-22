@@ -3,7 +3,7 @@
 
     "criteria": {
         "liver_health_below_15": {
-            "trigger": "steroid_planet:liver_health",
+            "trigger": "steroid_planet:health_condition",
             "conditions": {
                 "liver_health": 15.0
             }

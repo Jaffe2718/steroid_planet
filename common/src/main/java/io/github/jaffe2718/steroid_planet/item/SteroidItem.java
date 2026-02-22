@@ -41,7 +41,7 @@ public class SteroidItem extends Item {
             ((PlayerAttributeAccessor) player).recordSteroid(this);
             if (player instanceof ServerPlayerEntity sPlayer) {
                 Criteria.CONSUME_ITEM.trigger(sPlayer, stack);
-                ModCriteria.LIVER_HEALTH.trigger(sPlayer);
+                ModCriteria.HEALTH_CONDITION.trigger(sPlayer);
                 ModCriteria.STEROID_RECORDS.trigger(sPlayer);
             }
             player.incrementStat(Stats.USED.getOrCreateStat(this));

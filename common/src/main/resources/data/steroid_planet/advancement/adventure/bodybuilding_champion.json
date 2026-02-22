@@ -3,9 +3,9 @@
 
     "criteria": {
         "reach_muscle_100": {
-            "trigger": "steroid_planet:muscle",
+            "trigger": "steroid_planet:health_condition",
             "conditions": {
-                "muscle": 100.0
+                "muscle": 90.0
             }
         }
     },
