@@ -47,10 +47,10 @@ public abstract class PlayerEntityModelMixin implements PlayerEntityModelAccesso
     @Inject(method = "getTexturedModelData", at = @At("RETURN"), cancellable = true)
     private static void getTexturedModelData(Dilation dilation, boolean slim, CallbackInfoReturnable<ModelData> cir) {
         ModelData modelData = cir.getReturnValue();
-        modelData.getRoot().getChild("body").addChild("pectoral_muscle", ModelPartBuilder.create().uv(16, 16).cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 7.0F, 4.0F, dilation.add(2.0F, 0.0F, 1.5F)), ModelTransform.NONE);
-        modelData.getRoot().getChild("jacket").addChild("chestplate", ModelPartBuilder.create().uv(16, 32).cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 7.0F, 4.0F, dilation.add(2.0F, 0.0F, 1.5F).add(0.25F)), ModelTransform.NONE);
-        modelData.getRoot().getChild("head").addChild("pointy_head", ModelPartBuilder.create().uv(10, 2).cuboid(-1.0F, -9.0F, -1.0F, 2.0F, 2.0F, 2.0F, dilation), ModelTransform.NONE);
-        modelData.getRoot().getChild("hat").addChild("pointy_hat", ModelPartBuilder.create().uv(42, 2).cuboid(-1.0F, -9.0F, -1.0F, 2.0F, 2.0F, 2.0F, dilation.add(0.25F)), ModelTransform.NONE);
+        modelData.getRoot().getChild("body").addChild("pectoral_muscle", ModelPartBuilder.create().uv(16, 16).cuboid(-4.0F, -0.5F, -2.0F, 8.0F, 7.0F, 4.0F, dilation.add(2.0F, 0.0F, 1.5F)), ModelTransform.NONE);
+        modelData.getRoot().getChild("jacket").addChild("chestplate", ModelPartBuilder.create().uv(16, 32).cuboid(-4.0F, -0.5F, -2.0F, 8.0F, 7.0F, 4.0F, dilation.add(2.0F, 0.0F, 1.5F).add(0.25F)), ModelTransform.NONE);
+        modelData.getRoot().getChild("head").addChild("pointy_head", ModelPartBuilder.create().uv(8, 2).cuboid(-1.0F, -9.5F, -1.0F, 2.0F, 2.0F, 2.0F, dilation), ModelTransform.NONE);
+        modelData.getRoot().getChild("hat").addChild("pointy_hat", ModelPartBuilder.create().uv(40, 2).cuboid(-1.0F, -9.5F, -1.0F, 2.0F, 2.0F, 2.0F, dilation.add(0.25F)), ModelTransform.NONE);
         cir.setReturnValue(modelData);
     }
 
