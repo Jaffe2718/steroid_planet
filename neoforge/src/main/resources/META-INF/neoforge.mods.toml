@@ -12,6 +12,7 @@ description = '''
 
 '''
 logoFile = "assets/steroid_planet/icon.png"
+modUrl = "https://modrinth.com/mod/steroid_planet"
 
 [[dependencies.steroid_planet]]
 modId = "neoforge"

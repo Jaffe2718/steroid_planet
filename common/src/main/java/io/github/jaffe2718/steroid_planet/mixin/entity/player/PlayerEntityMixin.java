@@ -76,6 +76,11 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
 
     @Inject(method = "readCustomDataFromNbt", at = @At("RETURN"))
     private void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
+        if (nbt.contains("BodyFat", 5)) {               // NbtType.FLOAT
+            this.setBodyFat(nbt.getFloat("BodyFat"));
+        } else {
+            this.setBodyFat(30.0F);
+        }
         if (nbt.contains("Muscle", 5)) {                // NbtType.FLOAT
             this.setMuscle(nbt.getFloat("Muscle"));
         } else {
@@ -85,11 +90,6 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
             this.setLiverHealth(nbt.getFloat("LiverHealth"));
         }  else {
             this.setLiverHealth(100.0F);
-        }
-        if (nbt.contains("BodyFat", 5)) {               // NbtType.FLOAT
-            this.setBodyFat(nbt.getFloat("BodyFat"));
-        } else {
-            this.setBodyFat(30.0F);
         }
         if (nbt.contains("LiverPoisoningTimer", 4)) {   // NbtType.INT
             this.liverPoisoningTimer = nbt.getInt("LiverPoisoningTimer");

@@ -4,11 +4,12 @@ import io.github.jaffe2718.steroid_planet.SteroidPlanet;
 import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,41 +33,16 @@ public abstract class InGameHudMixin {
     @Unique
     private static final Identifier BODY_FAT_TEXTURE = SteroidPlanet.id("hud/body_fat");
 
-    @Unique
-    private static int steroid_planet$muscleBarY = 0;
-
-    @Shadow
-    protected abstract PlayerEntity getCameraPlayer();
-
-    @Shadow
-    protected abstract int getHeartCount(LivingEntity entity);
-
-    @Shadow
-    protected abstract int getHeartRows(int heartCount);
-
-    @Shadow
-    protected abstract LivingEntity getRiddenEntity();
 
     @Inject(method = "renderArmor", at = @At("RETURN"))
     private static void renderArmor(DrawContext context, PlayerEntity player, int i, int j, int k, int x, CallbackInfo ci) {
-        if (player.getArmor() > 0) {
-            steroid_planet$muscleBarY = i - (j - 1) * k - 20;
-        } else  {
-            steroid_planet$muscleBarY = i - (j - 1) * k - 10;
+        int muscleBarY = i - (j - 1) * k - (player.getArmor() > 0 ? 20 : 10);
+        steroid_planet$renderMuscleBar(context, player, context.getScaledWindowWidth() / 2 - 91, muscleBarY);
+        int liverBarY = context.getScaledWindowHeight() - Math.max(steroid_planet$getHeartRows(steroid_planet$getHeartCount(player.getVehicle())) * 10, 10) - 39;
+        if (player.isSubmergedInWater() || player.getAir() < player.getMaxAir()) {
+            liverBarY -= 10;
         }
-    }
-
-    @Inject(method = "renderStatusBars", at = @At("RETURN"))
-    private void renderStatusBars(DrawContext context,CallbackInfo ci) {
-        PlayerEntity player = this.getCameraPlayer();
-        if (player != null) {
-            steroid_planet$renderMuscleBar(context, player, context.getScaledWindowWidth() / 2 - 91, steroid_planet$muscleBarY);
-            int liverBarY = context.getScaledWindowHeight() - Math.max(this.getHeartRows(this.getHeartCount(this.getRiddenEntity())) * 10, 10) - 39;
-            if (player.isSubmergedInWater() || player.getAir() < player.getMaxAir()) {
-                liverBarY -= 10;
-            }
-            steroid_planet$renderLiverHealthBar(context, player, context.getScaledWindowWidth() / 2 + 81, liverBarY);
-        }
+        steroid_planet$renderLiverHealthBar(context, player, context.getScaledWindowWidth() / 2 + 81, liverBarY);
     }
 
     /**
@@ -77,7 +53,7 @@ public abstract class InGameHudMixin {
      * @param y The y position.
      */
     @Unique
-    private void steroid_planet$renderMuscleBar(DrawContext context, PlayerEntity player, int x, int y) {
+    private static void steroid_planet$renderMuscleBar(DrawContext context, PlayerEntity player, int x, int y) {
         float muscleValue = ((PlayerAttributeAccessor) player).getMuscle();
         float bodyFatValue = ((PlayerAttributeAccessor) player).getBodyFat();
         int bodyFatIcons = (int) bodyFatValue / 10;
@@ -95,7 +71,7 @@ public abstract class InGameHudMixin {
     }
 
     @Unique
-    private void steroid_planet$renderLiverHealthBar(DrawContext context, PlayerEntity player, int x, int y) {
+    private static void steroid_planet$renderLiverHealthBar(DrawContext context, PlayerEntity player, int x, int y) {
         float liverValue = ((PlayerAttributeAccessor) player).getLiverHealth();
         int fullLiver = Math.round(liverValue / 10);
         boolean halfLiver = 1E-3 < (liverValue % 10) && (liverValue % 10) < 5;
@@ -104,6 +80,26 @@ public abstract class InGameHudMixin {
         }
         if (halfLiver) {
             context.drawGuiTexture(LIVER_HEALTH_HALF_TEXTURE, x - fullLiver * 8, y, 9, 9);
+        }
+    }
+
+    @Unique
+    private static int steroid_planet$getHeartRows(int heartCount) {
+        return (int)Math.ceil((double)heartCount / (double)10.0F);
+    }
+
+    @Unique
+    private static int steroid_planet$getHeartCount(@Nullable Entity entity) {
+        if (entity instanceof LivingEntity livingEntity && livingEntity.isLiving()) {
+            float f = livingEntity.getMaxHealth();
+            int i = (int)(f + 0.5F) / 2;
+            if (i > 30) {
+                i = 30;
+            }
+
+            return i;
+        } else {
+            return 0;
         }
     }
 }

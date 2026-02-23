@@ -27,7 +27,12 @@
         "java": ">=21",
         "architectury": ">=${architectury_api_min}"
     },
-    "suggests": {
-        "another-mod": "*"
+    "custom": {
+        "modmenu": {
+            "links": {
+                "Modrinth": "https://modrinth.com/mod/steroid_planet"
+            },
+            "update_checker": true
+        }
     }
 }
