@@ -30,6 +30,9 @@ public abstract class InGameHudMixin {
     private static final Identifier MUSCLE_HALF_TEXTURE = SteroidPlanet.id("hud/muscle_half");
 
     @Unique
+    private static final Identifier BODY_FAT_TEXTURE = SteroidPlanet.id("hud/body_fat");
+
+    @Unique
     private static int steroid_planet$muscleBarY = 0;
 
     @Shadow
@@ -76,13 +79,18 @@ public abstract class InGameHudMixin {
     @Unique
     private void steroid_planet$renderMuscleBar(DrawContext context, PlayerEntity player, int x, int y) {
         float muscleValue = ((PlayerAttributeAccessor) player).getMuscle();
-        int fullMuscle = Math.round(muscleValue / 10);
-        boolean halfMuscle = 1E-3 < (muscleValue % 10) && (muscleValue % 10) < 5;
-        for (int i = 0; i < fullMuscle; i++) {
+        float bodyFatValue = ((PlayerAttributeAccessor) player).getBodyFat();
+        int bodyFatIcons = (int) bodyFatValue / 10;
+        int fullMuscleIcons = Math.round(muscleValue / 10);
+        boolean halfMuscle = 0 < (muscleValue % 10) && (muscleValue % 10) < 5;
+        for (int i = 0; i < bodyFatIcons; i++) {
+            context.drawGuiTexture(BODY_FAT_TEXTURE, x + i * 8, y, 9, 9);
+        }
+        for (int i = bodyFatIcons; i < bodyFatIcons + fullMuscleIcons; i++) {
             context.drawGuiTexture(MUSCLE_FULL_TEXTURE, x + i * 8, y, 9, 9);
         }
         if (halfMuscle) {
-            context.drawGuiTexture(MUSCLE_HALF_TEXTURE, x + fullMuscle * 8, y, 9, 9);
+            context.drawGuiTexture(MUSCLE_HALF_TEXTURE, x + (bodyFatIcons + fullMuscleIcons) * 8, y, 9, 9);
         }
     }
 

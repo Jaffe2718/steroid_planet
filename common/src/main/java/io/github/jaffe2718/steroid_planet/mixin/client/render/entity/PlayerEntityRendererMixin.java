@@ -22,11 +22,11 @@ public abstract class PlayerEntityRendererMixin {
 
         if (((PlayerAttributeAccessor) player).getMuscle() >= HealthConditionCriterion.MUSCLE_THRESHOLD) {
             modelAccessor.getPectoralMuscle().visible = true;
-            modelAccessor.getChestplate().visible = true;
+            modelAccessor.getPectoral_muscle_jecket().visible = true;
             modelAccessor.strengthenArms();
         } else {
             modelAccessor.getPectoralMuscle().visible = false;
-            modelAccessor.getChestplate().visible = false;
+            modelAccessor.getPectoral_muscle_jecket().visible = false;
             modelAccessor.resetArms();
         }
         modelAccessor.getPointyHead().visible = ((PlayerAttributeAccessor) player).getLiverHealth() < HealthConditionCriterion.LIVER_HEALTH_THRESHOLD;

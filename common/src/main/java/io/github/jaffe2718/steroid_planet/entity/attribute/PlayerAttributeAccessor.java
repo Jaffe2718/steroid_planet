@@ -12,23 +12,23 @@ import net.minecraft.util.Identifier;
 import java.util.Set;
 
 public interface PlayerAttributeAccessor {
-    RegistryEntry<EntityAttribute> MAX_MUSCLE = register("player.max_muscle", (new ClampedEntityAttribute("attribute.name.player.muscle", 100.0F, 0.0F, 100.0F).setTracked(true)));
-    RegistryEntry<EntityAttribute> MAX_LIVER_HEALTH = register("player.max_liver_health", (new ClampedEntityAttribute("attribute.name.player.liver_health", 100.0F, 0.0F, 100.0F).setTracked(true)));
+    RegistryEntry<EntityAttribute> MUSCLE_AND_FAT_CAPACITY = register("player.muscle_and_fat_capacity", (new ClampedEntityAttribute("attribute.name.steroid_planet.player.muscle_and_fat_capacity", 100.0F, 30.0F, 100.0F).setTracked(true)));
+    RegistryEntry<EntityAttribute> MAX_LIVER_HEALTH = register("player.max_liver_health", (new ClampedEntityAttribute("attribute.name.steroid_planet.player.max_liver_health", 100.0F, 0.0F, 100.0F).setTracked(true)));
 
     private static RegistryEntry<EntityAttribute> register(String id, EntityAttribute attribute) {
         return Registry.registerReference(Registries.ATTRIBUTE, SteroidPlanet.id(id), attribute);
     }
 
     float getMuscle();
-
     void setMuscle(float muscle);
 
     float getLiverHealth();
-
     void setLiverHealth(float liverHealth);
 
-    Set<Identifier> querySteroids();
+    float getBodyFat();
+    void setBodyFat(float bodyFat);
 
+    Set<Identifier> querySteroids();
     void recordSteroid(SteroidItem steroid);
 
 
@@ -41,11 +41,19 @@ public interface PlayerAttributeAccessor {
         setLiverHealth(getLiverHealth() - loss);
     }
 
+    default void lossBodyFat(float loss) {
+        setBodyFat(getBodyFat() - loss);
+    }
+
     default void gainMuscle(float gain) {
         setMuscle(getMuscle() + gain);
     }
 
     default void gainLiverHealth(float gain) {
         setLiverHealth(getLiverHealth() + gain);
+    }
+
+    default void gainBodyFat(float gain) {
+        setBodyFat(getBodyFat() + gain);
     }
 }

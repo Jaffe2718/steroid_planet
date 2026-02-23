@@ -1,11 +1,26 @@
 package io.github.jaffe2718.steroid_planet.entity.effect;
 
+import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class TechFitnessStatusEffect extends StatusEffect {
 
-    public TechFitnessStatusEffect() {
-        super(StatusEffectCategory.NEUTRAL, 0xFF5300);
+    protected TechFitnessStatusEffect(StatusEffectCategory category, int color) {
+        super(category, color);
+    }
+
+    @Override
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
+        if (!(entity instanceof PlayerEntity)) return false;
+        PlayerAttributeAccessor player = (PlayerAttributeAccessor) entity;
+        switch (amplifier) {
+            case 0 -> player.lossLiverHealth(0.002F);
+            case 1 -> player.lossLiverHealth(0.005F);
+            case 2 -> player.lossLiverHealth(0.01F);
+        }
+        return true;
     }
 }

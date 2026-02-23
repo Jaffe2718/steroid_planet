@@ -8,9 +8,8 @@ import io.github.jaffe2718.steroid_planet.entity.damage.ModDamageTypes;
 import io.github.jaffe2718.steroid_planet.entity.effect.Effects;
 import io.github.jaffe2718.steroid_planet.item.SteroidItem;
 import io.github.jaffe2718.steroid_planet.registry.tag.ItemTags;
-import net.minecraft.block.BlockState;
 import net.minecraft.component.type.FoodComponent;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -48,6 +47,8 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
 
     @Unique private static final TrackedData<Float> LIVER_HEALTH = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.FLOAT);
 
+    @Unique private static final TrackedData<Float> BODY_FAT = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.FLOAT);  // default value is 30.0F
+
     /**
      * Record the steroids the player is using.
      * id -> boolean
@@ -60,28 +61,34 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
     private void initDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
         builder.add(MUSCLE, 0.0F);
         builder.add(LIVER_HEALTH, 100.0F);
+        builder.add(BODY_FAT, 30.0F);
         builder.add(STEROID_USING_RECORDS, new NbtCompound());
     }
 
     @Inject(method = "createPlayerAttributes", at = @At("RETURN"), cancellable = true)
     private static void createPlayerAttributes(@NotNull CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
         cir.setReturnValue(cir.getReturnValue()
-                .add(PlayerAttributeAccessor.MAX_MUSCLE)
+                .add(PlayerAttributeAccessor.MUSCLE_AND_FAT_CAPACITY)
                 .add(PlayerAttributeAccessor.MAX_LIVER_HEALTH)
         );
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At("RETURN"))
     private void readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
-        if (nbt.contains("Muscle", 5)) {        // NbtType.FLOAT
+        if (nbt.contains("Muscle", 5)) {                // NbtType.FLOAT
             this.setMuscle(nbt.getFloat("Muscle"));
         } else {
             this.setMuscle(0.0F);
         }
-        if (nbt.contains("LiverHealth", 5)) {   // NbtType.FLOAT
+        if (nbt.contains("LiverHealth", 5)) {           // NbtType.FLOAT
             this.setLiverHealth(nbt.getFloat("LiverHealth"));
         }  else {
             this.setLiverHealth(100.0F);
+        }
+        if (nbt.contains("BodyFat", 5)) {               // NbtType.FLOAT
+            this.setBodyFat(nbt.getFloat("BodyFat"));
+        } else {
+            this.setBodyFat(30.0F);
         }
         if (nbt.contains("LiverPoisoningTimer", 4)) {   // NbtType.INT
             this.liverPoisoningTimer = nbt.getInt("LiverPoisoningTimer");
@@ -95,6 +102,7 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
     private void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
         nbt.putFloat("Muscle", this.getMuscle());
         nbt.putFloat("LiverHealth", this.getLiverHealth());
+        nbt.putFloat("BodyFat", this.getBodyFat());
         nbt.putInt("LiverPoisoningTimer", this.liverPoisoningTimer);
         nbt.put("SteroidUsingRecords", ((PlayerEntity) (Object) this).getDataTracker().get(STEROID_USING_RECORDS));
     }
@@ -102,8 +110,8 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
     /**
      * When the player attacks a living entity, if the player has the Tech Fitness effect, the player will gain muscle.
      */
-    @Inject(method = "attackLivingEntity", at = @At("RETURN"))
-    private void attackLivingEntity(LivingEntity target, CallbackInfo ci) {
+    @Inject(method = "attack", at = @At("HEAD"))
+    private void attack(Entity target, CallbackInfo ci) {
         if (target.isAttackable()) {
             if (((PlayerEntity) (Object) this).getStatusEffect(Effects.TECH_FITNESS) instanceof StatusEffectInstance techFitness) {
                 this.gainMuscle((techFitness.getAmplifier() + 1.0F) * 3.0F);
@@ -117,14 +125,6 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
     }
 
     /**
-     * When the player breaks a block, the speed of breaking the block is increased by the player's muscle.
-     */
-    @Inject(method = "getBlockBreakingSpeed", at = @At("RETURN"), cancellable = true)
-    private void getBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> cir) {
-        cir.setReturnValue(cir.getReturnValue() * (1 + this.getMuscle() / 100F));
-    }
-
-    /**
      * Loss muscle every tick
      * No steroid_planet:tech_fitness effect, loss 0.01F per tick
      * With each amplifier level, the loss rate is halved.
@@ -132,30 +132,38 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
     @Inject(method = "tick", at = @At("RETURN"))
     private void tick(CallbackInfo ci) {
         float muscleLoss = 0.01F;
+        float fatLoss = 0.01F;
         if (((PlayerEntity) (Object) this).getStatusEffect(Effects.TECH_FITNESS) instanceof StatusEffectInstance techFitness) {
             switch (techFitness.getAmplifier()) {
                 case 0 -> {
                     muscleLoss *= 0.5F;
-                    this.lossLiverHealth(0.002F);
+                    fatLoss *= 1.5F;
                 }
                 case 1 -> {
                     muscleLoss *= 0.25F;
-                    this.lossLiverHealth(0.005F);
+                    fatLoss *= 2.0F;
                 }
                 case 2 -> {
                     muscleLoss *= 0.125F;
-                    this.lossLiverHealth(0.01F);
+                    fatLoss *= 2.5F;
                 }
             }
         }
-        if (((PlayerEntity) (Object) this).isSleeping()) {
-            this.gainLiverHealth(0.15F);
+        if (!((PlayerEntity) (Object) this).hasStatusEffect(Effects.BODYBUILDING_PREPARATION_PERIOD)) {
+            this.lossMuscle(muscleLoss);
+        }
+        if (((PlayerEntity) (Object) this).isSwimming() || ((PlayerEntity) (Object) this).isSprinting()) {
+            this.lossBodyFat(fatLoss);
         }
         if (((PlayerEntity) (Object) this).getWorld().getDifficulty() == Difficulty.PEACEFUL) {
             this.gainLiverHealth(1.0F);
         }
-        this.lossMuscle(muscleLoss);
         this.applyLiverPoisoning();
+    }
+
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;wakeUp(ZZ)V", shift = At.Shift.AFTER))
+    private void onWakeUpNaturally(CallbackInfo ci) {
+        this.gainLiverHealth(10.0F);
     }
 
     /**
@@ -180,6 +188,13 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
             this.gainLiverHealth(8.0F);
         } else if (stack.isIn(ItemTags.LIVER_HEALING_III)) {
             this.gainLiverHealth(100.0F);
+        }
+        if (stack.isIn(ItemTags.FAT_I)) {
+            this.gainBodyFat(2.0F);
+        } else if (stack.isIn(ItemTags.FAT_II)) {
+            this.gainBodyFat(5.0F);
+        } else if (stack.isIn(ItemTags.FAT_III)) {
+            this.gainBodyFat(9.0F);
         }
     }
 
@@ -223,6 +238,10 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
         return ((PlayerEntity) (Object) this).getDataTracker().get(LIVER_HEALTH);
     }
 
+    /**
+     * Set muscle, clamped between [0.0F, max_muscle - body_fat], because body_fat + muscle <= max_muscle
+     * @param muscle muscle value to set
+     */
     @Unique
     @Override
     public void setMuscle(float muscle) {
@@ -230,20 +249,27 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                 MUSCLE,
                 MathHelper.clamp(muscle,
                         0.0F,
-                        (float) ((PlayerEntity) (Object) this).getAttributeValue(PlayerAttributeAccessor.MAX_MUSCLE)
+                        (float) ((PlayerEntity) (Object) this).getAttributeValue(PlayerAttributeAccessor.MUSCLE_AND_FAT_CAPACITY) - this.getBodyFat()
                 )
         );
         if (muscle > 20.0F) {
             ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).updateModifier(
                     new EntityAttributeModifier(
-                            SteroidPlanet.id("muscle"),
+                            SteroidPlanet.id("muscle_damage"),
                             this.getMuscle() / 100.0F,
                             EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
                     )
             );
         } else {
-            ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).removeModifier(SteroidPlanet.id("muscle"));
+            ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).removeModifier(SteroidPlanet.id("muscle_damage"));
         }
+        ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED).updateModifier(
+                new EntityAttributeModifier(
+                        SteroidPlanet.id("muscle_block_break_speed"),
+                        this.getMuscle() / 100.0F,
+                        EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+                )
+        );
     }
 
     @Unique
@@ -256,6 +282,35 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                         (float) ((PlayerEntity) (Object) this).getAttributeValue(PlayerAttributeAccessor.MAX_LIVER_HEALTH)
                 )
         );
+    }
+
+    @Unique
+    @Override
+    public float getBodyFat() {
+        return ((PlayerEntity) (Object) this).getDataTracker().get(BODY_FAT);
+    }
+
+    @Unique
+    @Override
+    public void setBodyFat(float bodyFat) {
+        ((PlayerEntity) (Object) this).getDataTracker().set(
+                BODY_FAT,
+                MathHelper.clamp(bodyFat,
+                        0.0F,
+                        (float) ((PlayerEntity) (Object) this).getAttributeValue(PlayerAttributeAccessor.MUSCLE_AND_FAT_CAPACITY) - this.getMuscle()
+                )
+        );
+        if (bodyFat > 50.0F) {
+            ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).updateModifier(
+                    new EntityAttributeModifier(
+                            SteroidPlanet.id("body_fat"),
+                            0.8F,
+                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                    )
+            );
+        } else {
+            ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).removeModifier(SteroidPlanet.id("body_fat"));
+        }
     }
 
     @Unique

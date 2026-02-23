@@ -1,0 +1,12 @@
+{
+    "replace": false,
+    "values": [
+        "#minecraft:fish",
+        "minecraft:baked_potato",
+        "minecraft:bread",
+        "minecraft:chicken",
+        "minecraft:cooked_mutton",
+        "minecraft:milk_bucket",
+        "minecraft:potato"
+    ]
+}

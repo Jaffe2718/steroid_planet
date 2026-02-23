@@ -2,8 +2,10 @@ package io.github.jaffe2718.steroid_planet.item;
 
 import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
 import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
+import io.github.jaffe2718.steroid_planet.entity.effect.Effects;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,8 +37,7 @@ public class ChampionTrophyItem extends Item {
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         if (user instanceof PlayerEntity player) {
-            ((PlayerAttributeAccessor) player).gainMuscle(100.0F);
-            ((PlayerAttributeAccessor) player).gainLiverHealth(100.0F);
+            ((PlayerAttributeAccessor) player).gainLiverHealth(20.0F);
             if (user instanceof ServerPlayerEntity sPlayer) {
                 Criteria.CONSUME_ITEM.trigger(sPlayer, stack);
                 ModCriteria.HEALTH_CONDITION.trigger(sPlayer);
@@ -44,6 +45,7 @@ public class ChampionTrophyItem extends Item {
             player.incrementStat(Stats.USED.getOrCreateStat(this));
             stack.decrementUnlessCreative(1, player);
         }
+        user.addStatusEffect(new StatusEffectInstance(Effects.BODYBUILDING_PREPARATION_PERIOD, 9600));
         return stack;
     }
 

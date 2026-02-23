@@ -22,7 +22,7 @@ public abstract class PlayerEntityModelMixin implements PlayerEntityModelAccesso
     private ModelPart pectoralMuscle;
 
     @Unique
-    private ModelPart chestplate;
+    private ModelPart pectoral_muscle_jecket;
 
     @Unique
     private ModelPart pointyHead;
@@ -39,7 +39,7 @@ public abstract class PlayerEntityModelMixin implements PlayerEntityModelAccesso
     @Inject(method = "<init>", at = @At("CTOR_HEAD"))
     private void constructor(ModelPart root, boolean thinArms, CallbackInfo ci) {
         this.pectoralMuscle = root.getChild("body").getChild("pectoral_muscle");
-        this.chestplate = root.getChild("jacket").getChild("chestplate");
+        this.pectoral_muscle_jecket = root.getChild("jacket").getChild("pectoral_muscle_jecket");
         this.pointyHead = root.getChild("head").getChild("pointy_head");
         this.pointyHat = root.getChild("hat").getChild("pointy_hat");
     }
@@ -48,7 +48,7 @@ public abstract class PlayerEntityModelMixin implements PlayerEntityModelAccesso
     private static void getTexturedModelData(Dilation dilation, boolean slim, CallbackInfoReturnable<ModelData> cir) {
         ModelData modelData = cir.getReturnValue();
         modelData.getRoot().getChild("body").addChild("pectoral_muscle", ModelPartBuilder.create().uv(16, 16).cuboid(-4.0F, -0.5F, -2.0F, 8.0F, 7.0F, 4.0F, dilation.add(2.0F, 0.0F, 1.5F)), ModelTransform.NONE);
-        modelData.getRoot().getChild("jacket").addChild("chestplate", ModelPartBuilder.create().uv(16, 32).cuboid(-4.0F, -0.5F, -2.0F, 8.0F, 7.0F, 4.0F, dilation.add(2.0F, 0.0F, 1.5F).add(0.25F)), ModelTransform.NONE);
+        modelData.getRoot().getChild("jacket").addChild("pectoral_muscle_jecket", ModelPartBuilder.create().uv(16, 32).cuboid(-4.0F, -0.5F, -2.0F, 8.0F, 7.0F, 4.0F, dilation.add(2.0F, 0.0F, 1.5F).add(0.25F)), ModelTransform.NONE);
         modelData.getRoot().getChild("head").addChild("pointy_head", ModelPartBuilder.create().uv(8, 2).cuboid(-1.0F, -9.5F, -1.0F, 2.0F, 2.0F, 2.0F, dilation), ModelTransform.NONE);
         modelData.getRoot().getChild("hat").addChild("pointy_hat", ModelPartBuilder.create().uv(40, 2).cuboid(-1.0F, -9.5F, -1.0F, 2.0F, 2.0F, 2.0F, dilation.add(0.25F)), ModelTransform.NONE);
         cir.setReturnValue(modelData);
@@ -56,13 +56,13 @@ public abstract class PlayerEntityModelMixin implements PlayerEntityModelAccesso
 
     @Inject(method = "getBodyParts", at = @At("RETURN"), cancellable = true)
     private void getBodyParts(CallbackInfoReturnable<Iterable<ModelPart>> cir) {
-        cir.setReturnValue(Iterables.concat(cir.getReturnValue(), ImmutableList.of(this.pectoralMuscle, this.chestplate)));
+        cir.setReturnValue(Iterables.concat(cir.getReturnValue(), ImmutableList.of(this.pectoralMuscle, this.pectoral_muscle_jecket)));
     }
 
     @Inject(method = "setVisible", at = @At("RETURN"))
     private void setVisible(boolean visible, CallbackInfo ci) {
         this.pectoralMuscle.visible = visible;
-        this.chestplate.visible = visible;
+        this.pectoral_muscle_jecket.visible = visible;
         this.pointyHead.visible = visible;
         this.pointyHat.visible = visible;
     }
@@ -75,8 +75,8 @@ public abstract class PlayerEntityModelMixin implements PlayerEntityModelAccesso
 
     @Unique
     @Override
-    public ModelPart getChestplate() {
-        return this.chestplate;
+    public ModelPart getPectoral_muscle_jecket() {
+        return this.pectoral_muscle_jecket;
     }
 
     @Unique
