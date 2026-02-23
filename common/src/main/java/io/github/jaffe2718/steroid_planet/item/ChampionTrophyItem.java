@@ -2,7 +2,7 @@ package io.github.jaffe2718.steroid_planet.item;
 
 import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
 import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
-import io.github.jaffe2718.steroid_planet.entity.effect.Effects;
+import io.github.jaffe2718.steroid_planet.entity.effect.ModEffects;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -45,7 +45,7 @@ public class ChampionTrophyItem extends Item {
             player.incrementStat(Stats.USED.getOrCreateStat(this));
             stack.decrementUnlessCreative(1, player);
         }
-        user.addStatusEffect(new StatusEffectInstance(Effects.BODYBUILDING_PREPARATION_PERIOD, 9600));
+        user.addStatusEffect(new StatusEffectInstance(ModEffects.BODYBUILDING_PREPARATION_PERIOD, 9600));
         return stack;
     }
 

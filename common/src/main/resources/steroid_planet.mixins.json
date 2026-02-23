@@ -12,7 +12,7 @@
     ],
     "mixins": [
         "block.BlockMixin",
-        "entity.damage.DamageTypesMixin",
+        "entity.effect.StatusEffectsMixin",
         "entity.player.PlayerEntityMixin"
     ],
     "injectors": {

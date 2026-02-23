@@ -1,7 +1,7 @@
 {
     "replace": false,
     "values": [
-        "#minecraft:fish",
+        "#minecraft:fishes",
         "minecraft:baked_potato",
         "minecraft:bread",
         "minecraft:chicken",

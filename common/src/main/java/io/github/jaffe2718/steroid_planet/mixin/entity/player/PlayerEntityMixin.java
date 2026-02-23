@@ -3,9 +3,10 @@ package io.github.jaffe2718.steroid_planet.mixin.entity.player;
 import io.github.jaffe2718.steroid_planet.SteroidPlanet;
 import io.github.jaffe2718.steroid_planet.advancement.criterion.HealthConditionCriterion;
 import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
+import io.github.jaffe2718.steroid_planet.entity.attribute.ModEntityAttributes;
 import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
-import io.github.jaffe2718.steroid_planet.entity.damage.ModDamageTypes;
-import io.github.jaffe2718.steroid_planet.entity.effect.Effects;
+import io.github.jaffe2718.steroid_planet.entity.damage.DamageTypes;
+import io.github.jaffe2718.steroid_planet.entity.effect.ModEffects;
 import io.github.jaffe2718.steroid_planet.item.SteroidItem;
 import io.github.jaffe2718.steroid_planet.registry.tag.ItemTags;
 import net.minecraft.component.type.FoodComponent;
@@ -68,8 +69,8 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
     @Inject(method = "createPlayerAttributes", at = @At("RETURN"), cancellable = true)
     private static void createPlayerAttributes(@NotNull CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
         cir.setReturnValue(cir.getReturnValue()
-                .add(PlayerAttributeAccessor.MUSCLE_AND_FAT_CAPACITY)
-                .add(PlayerAttributeAccessor.MAX_LIVER_HEALTH)
+                .add(ModEntityAttributes.MUSCLE_AND_FAT_CAPACITY)
+                .add(ModEntityAttributes.MAX_LIVER_HEALTH)
         );
     }
 
@@ -113,7 +114,7 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
     @Inject(method = "attack", at = @At("HEAD"))
     private void attack(Entity target, CallbackInfo ci) {
         if (target.isAttackable()) {
-            if (((PlayerEntity) (Object) this).getStatusEffect(Effects.TECH_FITNESS) instanceof StatusEffectInstance techFitness) {
+            if (((PlayerEntity) (Object) this).getStatusEffect(ModEffects.TECH_FITNESS) instanceof StatusEffectInstance techFitness) {
                 this.gainMuscle((techFitness.getAmplifier() + 1.0F) * 3.0F);
             } else {
                 this.gainMuscle(1.0F);
@@ -133,7 +134,7 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
     private void tick(CallbackInfo ci) {
         float muscleLoss = 0.01F;
         float fatLoss = 0.01F;
-        if (((PlayerEntity) (Object) this).getStatusEffect(Effects.TECH_FITNESS) instanceof StatusEffectInstance techFitness) {
+        if (((PlayerEntity) (Object) this).getStatusEffect(ModEffects.TECH_FITNESS) instanceof StatusEffectInstance techFitness) {
             switch (techFitness.getAmplifier()) {
                 case 0 -> {
                     muscleLoss *= 0.5F;
@@ -149,7 +150,7 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                 }
             }
         }
-        if (!((PlayerEntity) (Object) this).hasStatusEffect(Effects.BODYBUILDING_PREPARATION_PERIOD)) {
+        if (!((PlayerEntity) (Object) this).hasStatusEffect(ModEffects.BODYBUILDING_PREPARATION_PERIOD)) {
             this.lossMuscle(muscleLoss);
         }
         if (((PlayerEntity) (Object) this).isSwimming() || ((PlayerEntity) (Object) this).isSprinting()) {
@@ -173,7 +174,7 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
     @Inject(method = "eatFood", at = @At("HEAD"))
     private void eatFood(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) {
         if (stack.isIn(ItemTags.PROTEIN)) {
-            if (((PlayerEntity) (Object) this).getStatusEffect(Effects.TECH_FITNESS) instanceof StatusEffectInstance techFitness) {
+            if (((PlayerEntity) (Object) this).getStatusEffect(ModEffects.TECH_FITNESS) instanceof StatusEffectInstance techFitness) {
                 this.gainMuscle(8.0F + (techFitness.getAmplifier() + 1.0F) * 3.0F);
             } else {
                 this.gainMuscle(8.0F);
@@ -210,7 +211,7 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                     new DamageSource(((PlayerEntity) (Object) this)
                             .getWorld()
                             .getRegistryManager()
-                            .get(RegistryKeys.DAMAGE_TYPE).entryOf(ModDamageTypes.LIVER_POISONING)
+                            .get(RegistryKeys.DAMAGE_TYPE).entryOf(DamageTypes.LIVER_POISONING)
                     ),
                     1.0F
             );
@@ -249,7 +250,7 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                 MUSCLE,
                 MathHelper.clamp(muscle,
                         0.0F,
-                        (float) ((PlayerEntity) (Object) this).getAttributeValue(PlayerAttributeAccessor.MUSCLE_AND_FAT_CAPACITY) - this.getBodyFat()
+                        (float) ((PlayerEntity) (Object) this).getAttributeValue(ModEntityAttributes.MUSCLE_AND_FAT_CAPACITY) - this.getBodyFat()
                 )
         );
         if (muscle > 20.0F) {
@@ -279,7 +280,7 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                 LIVER_HEALTH,
                 MathHelper.clamp(liverHealth,
                         0.0F,
-                        (float) ((PlayerEntity) (Object) this).getAttributeValue(PlayerAttributeAccessor.MAX_LIVER_HEALTH)
+                        (float) ((PlayerEntity) (Object) this).getAttributeValue(ModEntityAttributes.MAX_LIVER_HEALTH)
                 )
         );
     }
@@ -297,14 +298,14 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                 BODY_FAT,
                 MathHelper.clamp(bodyFat,
                         0.0F,
-                        (float) ((PlayerEntity) (Object) this).getAttributeValue(PlayerAttributeAccessor.MUSCLE_AND_FAT_CAPACITY) - this.getMuscle()
+                        (float) ((PlayerEntity) (Object) this).getAttributeValue(ModEntityAttributes.MUSCLE_AND_FAT_CAPACITY) - this.getMuscle()
                 )
         );
         if (bodyFat > 50.0F) {
             ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).updateModifier(
                     new EntityAttributeModifier(
                             SteroidPlanet.id("body_fat"),
-                            0.8F,
+                            -0.2F,
                             EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                     )
             );

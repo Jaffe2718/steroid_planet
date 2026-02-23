@@ -11,7 +11,7 @@ authors = "Jaffe2718"
 description = '''
 
 '''
-#logoFile = ""
+logoFile = "assets/steroid_planet/icon.png"
 
 [[dependencies.steroid_planet]]
 modId = "neoforge"
@@ -23,14 +23,14 @@ side = "BOTH"
 [[dependencies.steroid_planet]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21,)"
+versionRange = "${neoforge_mc_versions}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.steroid_planet]]
 modId = "architectury"
 type = "required"
-versionRange = "[13.0.8,)"
+versionRange = "[${architectury_api_min},)"
 ordering = "AFTER"
 side = "BOTH"
 

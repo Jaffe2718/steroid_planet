@@ -36,7 +36,11 @@ processResources {
     inputs.property 'version', project.version
 
     filesMatching('fabric.mod.json') {
-        expand version: project.version
+        expand version: project.version,
+               fabric_loader_min: rootProject.fabric_loader_min,
+               fabric_mc_versions: rootProject.fabric_mc_versions,
+               architectury_api_min: rootProject.architectury_api_min
+
     }
 }
 
@@ -46,5 +50,5 @@ shadowJar {
 }
 
 remapJar {
-    input.set shadowJar.archiveFile
+    inputFile.set shadowJar.archiveFile
 }

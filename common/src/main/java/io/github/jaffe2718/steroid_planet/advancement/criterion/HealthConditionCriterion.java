@@ -38,8 +38,8 @@ public class HealthConditionCriterion extends AbstractCriterion<HealthConditionC
         );
         
         public boolean matches(float liverHealth, float muscle) {
-            return minLiverHealth.map(threshold -> threshold <= liverHealth).orElse(true) &&
-                    this.maxMuscle.map(threshold -> muscle >= threshold).orElse(true);
+            return minLiverHealth.map(threshold -> liverHealth < threshold).orElse(true)
+                    && this.maxMuscle.map(threshold -> muscle >= threshold).orElse(true);
         }
     }
 }

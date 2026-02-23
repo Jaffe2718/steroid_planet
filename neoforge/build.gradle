@@ -44,7 +44,9 @@ processResources {
     inputs.property 'version', project.version
 
     filesMatching('META-INF/neoforge.mods.toml') {
-        expand version: project.version
+        expand version: project.version,
+               neoforge_mc_versions: rootProject.neoforge_mc_versions,
+               architectury_api_min: rootProject.architectury_api_min
     }
 }
 
@@ -54,5 +56,5 @@ shadowJar {
 }
 
 remapJar {
-    input.set shadowJar.archiveFile
+    inputFile.set shadowJar.archiveFile
 }
