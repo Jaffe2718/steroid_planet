@@ -1,0 +1,31 @@
+{
+    "parent": "steroid_planet:adventure/tech_fitness_i",
+
+    "criteria": {
+        "fat_less_than_10": {
+            "trigger": "steroid_planet:health_condition",
+            "conditions": {
+                "body_fat": 10.0
+            }
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.steroid_planet.adventure.fat_loss_master.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:cake"
+        },
+        "title": {
+            "translate": "advancements.steroid_planet.adventure.fat_loss_master.title"
+        },
+        "frame": "goal"
+    },
+    "requirements": [
+        [
+            "fat_less_than_10"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

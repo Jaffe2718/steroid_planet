@@ -1,9 +1,10 @@
 {
     "parent": "steroid_planet:adventure/tech_fitness_iii",
     "criteria": {
-        "use_9_kinds_of_steroid": {
+        "proficient_in_steroid_use": {
             "conditions": {
-                "steroid_types": 9
+                "steroid_types": 9,
+                "steroid_grade": 3
             },
             "trigger": "steroid_planet:steroid_records"
         }
@@ -24,7 +25,7 @@
     },
     "requirements": [
         [
-            "use_9_kinds_of_steroid"
+            "proficient_in_steroid_use"
         ]
     ],
     "sends_telemetry_event": true

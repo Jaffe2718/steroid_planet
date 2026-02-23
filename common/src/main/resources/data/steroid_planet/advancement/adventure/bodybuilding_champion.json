@@ -1,8 +1,8 @@
 {
-    "parent": "steroid_planet:adventure/tech_fitness_i",
+    "parent": "steroid_planet:adventure/fat_loss_master",
 
     "criteria": {
-        "reach_muscle_100": {
+        "reach_muscle_90": {
             "trigger": "steroid_planet:health_condition",
             "conditions": {
                 "muscle": 90.0
@@ -25,7 +25,7 @@
     },
     "requirements": [
         [
-            "reach_muscle_100"
+            "reach_muscle_90"
         ]
     ],
     "sends_telemetry_event": true

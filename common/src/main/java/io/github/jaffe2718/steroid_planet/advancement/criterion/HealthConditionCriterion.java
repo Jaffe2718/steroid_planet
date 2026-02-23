@@ -23,23 +23,26 @@ public class HealthConditionCriterion extends AbstractCriterion<HealthConditionC
     public void trigger(ServerPlayerEntity player) {
         float playerLiverHealth = ((PlayerAttributeAccessor) player).getLiverHealth();
         float playerMuscle = ((PlayerAttributeAccessor) player).getMuscle();
-        this.trigger(player, (conditions) -> conditions.matches(playerLiverHealth, playerMuscle));
+        float playerBodyFat = ((PlayerAttributeAccessor) player).getBodyFat();
+        this.trigger(player, (conditions) -> conditions.matches(playerLiverHealth, playerMuscle, playerBodyFat));
     }
 
-    public record Conditions(Optional<LootContextPredicate> player, Optional<Float> minLiverHealth, Optional<Float> maxMuscle) implements AbstractCriterion.Conditions {
+    public record Conditions(Optional<LootContextPredicate> player, Optional<Float> minLiverHealth, Optional<Float> maxMuscle, Optional<Float> maxBodyFat) implements AbstractCriterion.Conditions {
         public static final Codec<HealthConditionCriterion.Conditions> CODEC = RecordCodecBuilder.create(
                 (instance) -> instance
                         .group(
                                 EntityPredicate.LOOT_CONTEXT_PREDICATE_CODEC.optionalFieldOf("player").forGetter(HealthConditionCriterion.Conditions::player),
                                 Codec.FLOAT.optionalFieldOf("liver_health").forGetter(HealthConditionCriterion.Conditions::minLiverHealth),
-                                Codec.FLOAT.optionalFieldOf("muscle").forGetter(HealthConditionCriterion.Conditions::maxMuscle)
+                                Codec.FLOAT.optionalFieldOf("muscle").forGetter(HealthConditionCriterion.Conditions::maxMuscle),
+                                Codec.FLOAT.optionalFieldOf("body_fat").forGetter(HealthConditionCriterion.Conditions::maxBodyFat)
                         )
                         .apply(instance, HealthConditionCriterion.Conditions::new)
         );
         
-        public boolean matches(float liverHealth, float muscle) {
+        public boolean matches(float liverHealth, float muscle, float bodyFat) {
             return minLiverHealth.map(threshold -> liverHealth < threshold).orElse(true)
-                    && this.maxMuscle.map(threshold -> muscle >= threshold).orElse(true);
+                    && this.maxMuscle.map(threshold -> muscle >= threshold).orElse(true)
+                    && this.maxBodyFat.map(threshold -> bodyFat < threshold).orElse(true);
         }
     }
 }

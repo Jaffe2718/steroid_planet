@@ -27,7 +27,7 @@ public class SteroidItem extends Item {
     private final UseAction useAction;
     private final float liverDamage;
     private final int duration;
-    private final int amplifier;
+    public final int amplifier;
 
     public SteroidItem(int duration, int amplifier, float liverDamage, UseAction useAction) {
         super(new Settings());

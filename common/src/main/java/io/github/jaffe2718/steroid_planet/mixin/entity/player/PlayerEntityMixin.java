@@ -153,8 +153,10 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
         if (!((PlayerEntity) (Object) this).hasStatusEffect(ModEffects.CONTEST_PREP)) {
             this.lossMuscle(muscleLoss);
         }
-        if (((PlayerEntity) (Object) this).isSwimming() || ((PlayerEntity) (Object) this).isSprinting()) {
+        if (((PlayerEntity) (Object) this) instanceof ServerPlayerEntity serverPlayer &&
+                (serverPlayer.isSwimming() || serverPlayer.isSprinting())) {
             this.lossBodyFat(fatLoss);
+            ModCriteria.HEALTH_CONDITION.trigger(serverPlayer);
         }
         if (((PlayerEntity) (Object) this).getWorld().getDifficulty() == Difficulty.PEACEFUL) {
             this.gainLiverHealth(1.0F);
