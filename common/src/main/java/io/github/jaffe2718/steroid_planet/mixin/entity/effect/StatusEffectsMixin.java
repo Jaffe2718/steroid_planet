@@ -19,6 +19,6 @@ public abstract class StatusEffectsMixin {
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void registerStatically(CallbackInfo ci) {
         ModEffects.TECH_FITNESS = ModEffects.register("tech_fitness", new TechFitnessStatusEffect(StatusEffectCategory.NEUTRAL, 0xFFD5B4) {});
-        ModEffects.BODYBUILDING_PREPARATION_PERIOD = ModEffects.register("bodybuilding_preparation_period", new StatusEffect(StatusEffectCategory.BENEFICIAL, 0xFF5300) {});
+        ModEffects.CONTEST_PREP = ModEffects.register("contest_prep", new StatusEffect(StatusEffectCategory.BENEFICIAL, 0xFF5300) {});
     }
 }

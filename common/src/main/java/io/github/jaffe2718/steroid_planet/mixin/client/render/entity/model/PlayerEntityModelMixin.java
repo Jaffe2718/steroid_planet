@@ -22,7 +22,7 @@ public abstract class PlayerEntityModelMixin implements PlayerEntityModelAccesso
     private ModelPart pectoralMuscle;
 
     @Unique
-    private ModelPart pectoral_muscle_jecket;
+    private ModelPart pectoralMuscleJecket;
 
     @Unique
     private ModelPart pointyHead;
@@ -39,7 +39,7 @@ public abstract class PlayerEntityModelMixin implements PlayerEntityModelAccesso
     @Inject(method = "<init>", at = @At("CTOR_HEAD"))
     private void constructor(ModelPart root, boolean thinArms, CallbackInfo ci) {
         this.pectoralMuscle = root.getChild("body").getChild("pectoral_muscle");
-        this.pectoral_muscle_jecket = root.getChild("jacket").getChild("pectoral_muscle_jecket");
+        this.pectoralMuscleJecket = root.getChild("jacket").getChild("pectoral_muscle_jecket");
         this.pointyHead = root.getChild("head").getChild("pointy_head");
         this.pointyHat = root.getChild("hat").getChild("pointy_hat");
     }
@@ -56,13 +56,13 @@ public abstract class PlayerEntityModelMixin implements PlayerEntityModelAccesso
 
     @Inject(method = "getBodyParts", at = @At("RETURN"), cancellable = true)
     private void getBodyParts(CallbackInfoReturnable<Iterable<ModelPart>> cir) {
-        cir.setReturnValue(Iterables.concat(cir.getReturnValue(), ImmutableList.of(this.pectoralMuscle, this.pectoral_muscle_jecket)));
+        cir.setReturnValue(Iterables.concat(cir.getReturnValue(), ImmutableList.of(this.pectoralMuscle, this.pectoralMuscleJecket)));
     }
 
     @Inject(method = "setVisible", at = @At("RETURN"))
     private void setVisible(boolean visible, CallbackInfo ci) {
         this.pectoralMuscle.visible = visible;
-        this.pectoral_muscle_jecket.visible = visible;
+        this.pectoralMuscleJecket.visible = visible;
         this.pointyHead.visible = visible;
         this.pointyHat.visible = visible;
     }
@@ -75,8 +75,8 @@ public abstract class PlayerEntityModelMixin implements PlayerEntityModelAccesso
 
     @Unique
     @Override
-    public ModelPart getPectoral_muscle_jecket() {
-        return this.pectoral_muscle_jecket;
+    public ModelPart getPectoralMuscleJecket() {
+        return this.pectoralMuscleJecket;
     }
 
     @Unique

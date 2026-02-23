@@ -150,7 +150,7 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                 }
             }
         }
-        if (!((PlayerEntity) (Object) this).hasStatusEffect(ModEffects.BODYBUILDING_PREPARATION_PERIOD)) {
+        if (!((PlayerEntity) (Object) this).hasStatusEffect(ModEffects.CONTEST_PREP)) {
             this.lossMuscle(muscleLoss);
         }
         if (((PlayerEntity) (Object) this).isSwimming() || ((PlayerEntity) (Object) this).isSprinting()) {

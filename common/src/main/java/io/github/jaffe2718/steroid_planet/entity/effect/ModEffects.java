@@ -9,7 +9,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 public abstract class ModEffects {
 
     public static RegistryEntry<StatusEffect> TECH_FITNESS;
-    public static RegistryEntry<StatusEffect> BODYBUILDING_PREPARATION_PERIOD;
+    public static RegistryEntry<StatusEffect> CONTEST_PREP;
 
     /**
      * Use vanilla registry to register a status effect.

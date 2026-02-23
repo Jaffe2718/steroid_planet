@@ -45,7 +45,7 @@ public class ChampionTrophyItem extends Item {
             player.incrementStat(Stats.USED.getOrCreateStat(this));
             stack.decrementUnlessCreative(1, player);
         }
-        user.addStatusEffect(new StatusEffectInstance(ModEffects.BODYBUILDING_PREPARATION_PERIOD, 9600));
+        user.addStatusEffect(new StatusEffectInstance(ModEffects.CONTEST_PREP, 9600));
         return stack;
     }
 
