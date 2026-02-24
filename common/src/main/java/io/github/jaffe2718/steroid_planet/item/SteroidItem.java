@@ -39,7 +39,7 @@ public class SteroidItem extends Item {
 
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         if (user instanceof PlayerEntity player) {
-            ((PlayerAttributeAccessor) player).lossLiverHealth(liverDamage);
+            ((PlayerAttributeAccessor) player).lossLiverHealth(this.liverDamage);
             ((PlayerAttributeAccessor) player).recordSteroid(this);
             if (player instanceof ServerPlayerEntity sPlayer) {
                 Criteria.CONSUME_ITEM.trigger(sPlayer, stack);

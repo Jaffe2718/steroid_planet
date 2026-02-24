@@ -8,7 +8,7 @@ import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccess
 import io.github.jaffe2718.steroid_planet.entity.damage.DamageTypes;
 import io.github.jaffe2718.steroid_planet.entity.effect.ModEffects;
 import io.github.jaffe2718.steroid_planet.item.SteroidItem;
-import io.github.jaffe2718.steroid_planet.registry.tag.ItemTags;
+import io.github.jaffe2718.steroid_planet.registry.tag.ModItemTags;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -171,11 +171,11 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
 
     /**
      * When the player eats food, if the food has the liver healing tag, the player will recover liver health.
-     * @see io.github.jaffe2718.steroid_planet.registry.tag.ItemTags
+     * @see ModItemTags
      */
     @Inject(method = "eatFood", at = @At("HEAD"))
     private void eatFood(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) {
-        if (stack.isIn(ItemTags.PROTEIN)) {
+        if (stack.isIn(ModItemTags.PROTEIN)) {
             if (((PlayerEntity) (Object) this).getStatusEffect(ModEffects.TECH_FITNESS) instanceof StatusEffectInstance techFitness) {
                 this.gainMuscle(8.0F + (techFitness.getAmplifier() + 1.0F) * 3.0F);
             } else {
@@ -185,18 +185,18 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                 ModCriteria.HEALTH_CONDITION.trigger(serverPlayer);
             }
         }
-        if (stack.isIn(ItemTags.LIVER_HEALING_I)) {
+        if (stack.isIn(ModItemTags.LIVER_HEALING_I)) {
             this.gainLiverHealth(0.75F);
-        } else if (stack.isIn(ItemTags.LIVER_HEALING_II)) {
+        } else if (stack.isIn(ModItemTags.LIVER_HEALING_II)) {
             this.gainLiverHealth(8.0F);
-        } else if (stack.isIn(ItemTags.LIVER_HEALING_III)) {
+        } else if (stack.isIn(ModItemTags.LIVER_HEALING_III)) {
             this.gainLiverHealth(100.0F);
         }
-        if (stack.isIn(ItemTags.FAT_I)) {
+        if (stack.isIn(ModItemTags.FAT_I)) {
             this.gainBodyFat(2.0F);
-        } else if (stack.isIn(ItemTags.FAT_II)) {
+        } else if (stack.isIn(ModItemTags.FAT_II)) {
             this.gainBodyFat(5.0F);
-        } else if (stack.isIn(ItemTags.FAT_III)) {
+        } else if (stack.isIn(ModItemTags.FAT_III)) {
             this.gainBodyFat(9.0F);
         }
     }

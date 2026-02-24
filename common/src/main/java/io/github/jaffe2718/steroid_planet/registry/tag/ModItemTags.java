@@ -6,7 +6,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 
 
-public interface ItemTags {
+public interface ModItemTags {
 
     TagKey<Item> FAT_I             = of("fat_i");
     TagKey<Item> FAT_II            = of("fat_ii");

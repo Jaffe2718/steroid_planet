@@ -1,14 +1,6 @@
 package io.github.jaffe2718.steroid_planet.entity.attribute;
 
-import dev.architectury.registry.registries.Registrar;
-import io.github.jaffe2718.steroid_planet.SteroidPlanet;
 import io.github.jaffe2718.steroid_planet.item.SteroidItem;
-import net.minecraft.entity.attribute.ClampedEntityAttribute;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 
 import java.util.Set;

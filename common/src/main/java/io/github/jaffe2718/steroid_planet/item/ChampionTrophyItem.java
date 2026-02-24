@@ -4,21 +4,28 @@ import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
 import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
 import io.github.jaffe2718.steroid_planet.entity.effect.ModEffects;
 import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ChampionTrophyItem extends Item {
+
+    private static final float LIVER_HEALING = 20.0F;
 
     public ChampionTrophyItem() {
         super(new Settings().rarity(Rarity.UNCOMMON));
@@ -37,7 +44,7 @@ public class ChampionTrophyItem extends Item {
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         if (user instanceof PlayerEntity player) {
-            ((PlayerAttributeAccessor) player).gainLiverHealth(20.0F);
+            ((PlayerAttributeAccessor) player).gainLiverHealth(LIVER_HEALING);
             if (user instanceof ServerPlayerEntity sPlayer) {
                 Criteria.CONSUME_ITEM.trigger(sPlayer, stack);
                 ModCriteria.HEALTH_CONDITION.trigger(sPlayer);
@@ -45,11 +52,17 @@ public class ChampionTrophyItem extends Item {
             player.incrementStat(Stats.USED.getOrCreateStat(this));
             stack.decrementUnlessCreative(1, player);
         }
-        user.addStatusEffect(new StatusEffectInstance(ModEffects.CONTEST_PREP, 9600));
+        user.addStatusEffect(new StatusEffectInstance(ModEffects.CONTEST_PREP, 9600, 0, false, false, true));
         return stack;
     }
 
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         return ItemUsage.consumeHeldItem(world, user, hand);
+    }
+
+    @Override
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+        PotionContentsComponent.buildTooltip(List.of(new StatusEffectInstance(ModEffects.CONTEST_PREP, 9600, 0, false, false, true)), tooltip::add, 1.0F, context.getUpdateTickRate());
+        tooltip.add(Text.translatable("item.steroid_planet.steroid.liver_healing", LIVER_HEALING).withColor(0x55FF55));
     }
 }

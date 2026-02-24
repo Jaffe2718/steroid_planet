@@ -9,6 +9,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * Use mixin to call the vanilla method to register the status effects.
+ * @see io.github.jaffe2718.steroid_planet.entity.effect.ModEffects
+ */
 @Mixin(StatusEffect.class)
 public abstract class StatusEffectsMixin {
 
