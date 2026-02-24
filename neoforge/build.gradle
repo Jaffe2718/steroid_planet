@@ -45,7 +45,7 @@ processResources {
     inputs.property 'version', project.version
 
     filesMatching('META-INF/neoforge.mods.toml') {
-        expand version: project.version,
+        expand version: rootProject.mod_version,
                neoforge_mc_versions: rootProject.neoforge_mc_versions,
                architectury_api_min: rootProject.architectury_api_min
     }
@@ -57,7 +57,19 @@ shadowJar {
 }
 
 remapJar {
+    archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}"
     inputFile.set shadowJar.archiveFile
+    from(rootDir.toPath().toString() + "/LICENSE") {
+        rename { "${it}_${rootProject.archives_name}"}
+    }
+    doLast {
+        def publishDir = layout.buildDirectory.dir("publish").get().asFile
+        publishDir.mkdirs()
+        copy {
+            from(remapJar.archiveFile)
+            into(publishDir)
+        }
+    }
 }
 
 modrinth {
