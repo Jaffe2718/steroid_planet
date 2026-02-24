@@ -21,10 +21,6 @@
             "entries": [
                 {
                     "type": "minecraft:item",
-                    "name": "steroid_planet:champion_trophy"
-                },
-                {
-                    "type": "minecraft:item",
                     "name": "steroid_planet:trestolone"
                 },
                 {

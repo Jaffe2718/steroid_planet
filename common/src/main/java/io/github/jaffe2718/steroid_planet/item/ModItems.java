@@ -17,7 +17,7 @@ public abstract class ModItems {
 
     // oral steroids
     public static final RegistrySupplier<Item> STANOZOLOL = registerSteroid("stanozolol", 3600, 0, 12.0F, UseAction.EAT);
-    public static final RegistrySupplier<Item> OXYMETHOLONE = registerSteroid("oxymetholone", 3600, 1, 18.0F, UseAction.EAT);
+    public static final RegistrySupplier<Item> OXYMETHOLONE = registerSteroid("oxymetholone", 3600, 1, 16.0F, UseAction.EAT);
     public static final RegistrySupplier<Item> OXANDROLONE = registerSteroid("oxandrolone", 3600, 0, 7.0F, UseAction.EAT);
     public static final RegistrySupplier<Item> METHENOLONE = registerSteroid("methenolone", 3600, 0, 5.0F, UseAction.EAT);
 
@@ -30,6 +30,7 @@ public abstract class ModItems {
     public static final RegistrySupplier<Item> TRENBOLOONE_ACETATE = registerSteroid("trenbolone_acetate", 3600, 1, 19.0F, UseAction.CROSSBOW);
     public static final RegistrySupplier<Item> NANDROLONE_DECANOATE = registerSteroid("nandrolone_decanoate", 3600, 0, 6.0F, UseAction.CROSSBOW);
     public static final RegistrySupplier<Item> NANDROLONE_PHENYLPROPIONATE = registerSteroid("nandrolone_phenylpropionate", 9600, 0, 7.0F, UseAction.CROSSBOW);
+    public static final RegistrySupplier<Item> SYNTHOL = registerSteroid("synthol", 9600, 1, 17.0F, UseAction.CROSSBOW);
 
     // Champion Trophy
     public static final RegistrySupplier<Item> CHAMPION_TROPHY = register("champion_trophy", ChampionTrophyItem::new);
@@ -71,7 +72,8 @@ public abstract class ModItems {
                 STENBOLONE,
                 TRENBOLOONE_ACETATE,
                 NANDROLONE_DECANOATE,
-                NANDROLONE_PHENYLPROPIONATE
+                NANDROLONE_PHENYLPROPIONATE,
+                SYNTHOL
         );
         CreativeTabRegistry.append(ItemGroups.INGREDIENTS, CHAMPION_TROPHY);
     }

@@ -194,6 +194,10 @@
                 {
                     "type": "minecraft:item",
                     "name": "steroid_planet:trenbolone_acetate"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:synthol"
                 }
             ],
             "functions": [
