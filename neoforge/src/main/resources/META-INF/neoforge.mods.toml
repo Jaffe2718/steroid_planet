@@ -1,6 +1,6 @@
 modLoader = "javafml"
 loaderVersion = "[2,)"
-issueTrackerURL = "https://github.com/Jaffe2718/Steroid-Planet/issues"
+issueTrackerURL = "https://github.com/Jaffe2718/steroid_planet/issues"
 license = "MIT"
 
 [[mods]]

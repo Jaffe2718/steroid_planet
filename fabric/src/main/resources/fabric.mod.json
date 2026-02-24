@@ -8,7 +8,9 @@
         "Jaffe2718"
     ],
     "contact": {
-        "homepage": "https://github.com/Jaffe2718/Steroid-Planet"
+        "homepage": "https://modrinth.com/mod/steroid_planet",
+        "issues": "https://github.com/Jaffe2718/steroid_planet/issues",
+        "sources": "https://github.com/Jaffe2718/steroid_planet"
     },
     "license": "MIT",
     "icon": "assets/steroid_planet/icon.png",
@@ -26,6 +28,9 @@
         "minecraft": "${fabric_mc_versions}",
         "java": ">=21",
         "architectury": ">=${architectury_api_min}"
+    },
+    "suggests": {
+        "modmenu": "*"
     },
     "custom": {
         "modmenu": {

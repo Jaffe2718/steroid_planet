@@ -1,0 +1,52 @@
+name: Publish
+
+on:
+    workflow_dispatch:
+
+jobs:
+    publish:
+        name: Publish Mod
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        if: github.actor == github.repository_owner
+        steps:
+            -   name: Checkout base branch
+                uses: actions/checkout@v2
+
+            -   name: Setup JDK
+                uses: actions/setup-java@v4
+                with:
+                    java-version: '21'
+                    distribution: 'temurin'
+
+            -   name: Grant execute permission for gradlew
+                run: chmod +x gradlew
+
+            -   name: Build Mod
+                run: ./gradlew build
+
+            -   name: Read Gradle Properties
+                id: read_gradle_properties
+                run: |
+                    mod_ver_line=$(grep '^[[:space:]]*mod_version' gradle.properties)
+                    minecraft_ver_line=$(grep '^[[:space:]]*minecraft_version' gradle.properties)
+                    echo "${mod_ver_line}" >> $GITHUB_OUTPUT            # mod_version=x.y.z
+                    echo "${minecraft_ver_line}" >> $GITHUB_OUTPUT      # minecraft_version=a.b.c
+
+            -   name: GitHub Release
+                uses: softprops/action-gh-release@v1
+                with:
+                    body_path: CHANGELOG.md
+                    tag_name: ${{ steps.read_gradle_properties.outputs.mod_version }}+${{ steps.read_gradle_properties.outputs.minecraft_version }}
+                    files: |
+                        fabric/build/libs/*.jar
+                        neoforge/build/libs/*.jar
+                    token: ${{ secrets.GH_RELEASE_TOKEN }}
+
+            -   name: Modrinth Publish
+                env:
+                    MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+                run: |
+                    ./gradlew :fabric:modrinth
+                    ./gradlew :neoforge:modrinth

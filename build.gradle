@@ -1,4 +1,5 @@
 plugins {
+    id 'com.modrinth.minotaur' version '2.+' apply false
     id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.gradleup.shadow' version '8.3.6' apply false
@@ -11,6 +12,24 @@ architectury {
 allprojects {
     group = rootProject.maven_group
     version = rootProject.mod_version
+}
+
+ext.getPublishChangelog = {
+    if (rootProject.file('CHANGELOG.md').exists()) {
+        return rootProject.file('CHANGELOG.md').text
+    } else {
+        return ''
+    }
+}
+
+ext.getPublishVersionType = {
+    if (project.mod_version.contains("alpha")) {
+        return 'alpha'
+    } else if (project.mod_version.contains("rc") || project.mod_version.contains("beta")) {
+        return 'beta'
+    } else {
+        return 'release'
+    }
 }
 
 subprojects {
