@@ -74,7 +74,7 @@ public class SteroidItem extends Item {
 
     /**
      * Apply the merge effect @{@link ModEffects#TECH_FITNESS} to the target.
-     * append the duration to the existing effect if the target already has the effect.
+     * Append the duration to the existing effect if the target already has the effect.
      * Select the better amplifier between the existing effect and the new effect.
      * @param target the target entity to apply the effect to
      */
