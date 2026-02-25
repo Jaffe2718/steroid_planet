@@ -63,6 +63,6 @@ public class ChampionTrophyItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         PotionContentsComponent.buildTooltip(List.of(new StatusEffectInstance(ModEffects.CONTEST_PREP, 9600, 0, false, false, true)), tooltip::add, 1.0F, context.getUpdateTickRate());
-        tooltip.add(Text.translatable("item.steroid_planet.steroid.liver_healing", LIVER_HEALING).withColor(0x55FF55));
+        tooltip.add(Text.translatable("tooltip.item.steroid_planet.steroid.liver_healing", LIVER_HEALING).withColor(0x55FF55));
     }
 }

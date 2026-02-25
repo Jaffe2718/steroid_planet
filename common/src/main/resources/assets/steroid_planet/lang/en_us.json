@@ -30,10 +30,10 @@
     "item.steroid_planet.oxymetholone": "Oxymetholone",
     "item.steroid_planet.stanozolol": "Stanozolol",
     "item.steroid_planet.stenbolone": "Stenbolone",
-    "item.steroid_planet.steroid.liver_damage": "Liver Damage: %s",
-    "item.steroid_planet.steroid.liver_healing": "Liver Healing: %s",
     "item.steroid_planet.synthol": "Synthol",
     "item.steroid_planet.trenbolone": "Trenbolone",
     "item.steroid_planet.trenbolone_acetate": "Trenbolone Acetate",
-    "item.steroid_planet.trestolone": "Trestolone"
+    "item.steroid_planet.trestolone": "Trestolone",
+    "tooltip.item.steroid_planet.steroid.liver_damage": "Liver Damage: %s",
+    "tooltip.item.steroid_planet.steroid.liver_healing": "Liver Healing: %s"
 }

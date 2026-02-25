@@ -30,10 +30,10 @@
     "item.steroid_planet.oxymetholone": "康复龙",
     "item.steroid_planet.stanozolol": "康力龙",
     "item.steroid_planet.stenbolone": "司滕勃龙",
-    "item.steroid_planet.steroid.liver_damage": "肝损值：%s",
-    "item.steroid_planet.steroid.liver_healing": "护肝值：%s",
     "item.steroid_planet.synthol": "西斯龙",
     "item.steroid_planet.trenbolone": "群勃龙",
     "item.steroid_planet.trenbolone_acetate": "乙酸群勃龙",
-    "item.steroid_planet.trestolone": "曲托龙"
+    "item.steroid_planet.trestolone": "曲托龙",
+    "tooltip.item.steroid_planet.steroid.liver_damage": "肝损值：%s",
+    "tooltip.item.steroid_planet.steroid.liver_healing": "护肝值：%s"
 }

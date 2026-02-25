@@ -69,7 +69,7 @@ public class SteroidItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         PotionContentsComponent.buildTooltip(List.of(new StatusEffectInstance(ModEffects.TECH_FITNESS, this.duration, this.amplifier)), tooltip::add, 1.0F, context.getUpdateTickRate());
-        tooltip.add(Text.translatable("item.steroid_planet.steroid.liver_damage", liverDamage).withColor(0xFF5555));
+        tooltip.add(Text.translatable("tooltip.item.steroid_planet.steroid.liver_damage", liverDamage).withColor(0xFF5555));
     }
 
     /**
