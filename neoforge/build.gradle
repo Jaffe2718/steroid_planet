@@ -51,6 +51,11 @@ processResources {
     }
 }
 
+sourcesJar {
+    dependsOn project(":common").sourcesJar
+    from project(":common").sourcesJar.archiveFile.map { zipTree(it) }
+}
+
 shadowJar {
     configurations = [project.configurations.shadowBundle]
     archiveClassifier = 'dev-shadow'
