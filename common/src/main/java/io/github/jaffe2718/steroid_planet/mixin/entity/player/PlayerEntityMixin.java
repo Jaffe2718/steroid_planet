@@ -8,8 +8,6 @@ import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccess
 import io.github.jaffe2718.steroid_planet.entity.damage.DamageTypes;
 import io.github.jaffe2718.steroid_planet.entity.effect.ModEffects;
 import io.github.jaffe2718.steroid_planet.item.SteroidItem;
-import io.github.jaffe2718.steroid_planet.registry.tag.ModItemTags;
-import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -20,7 +18,6 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
@@ -28,7 +25,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -167,38 +163,6 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;wakeUp(ZZ)V", shift = At.Shift.AFTER))
     private void onWakeUpNaturally(CallbackInfo ci) {
         this.gainLiverHealth(10.0F);
-    }
-
-    /**
-     * When the player eats food, if the food has the liver healing tag, the player will recover liver health.
-     * @see ModItemTags
-     */
-    @Inject(method = "eatFood", at = @At("HEAD"))
-    private void eatFood(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) {
-        if (stack.isIn(ModItemTags.PROTEIN)) {
-            if (((PlayerEntity) (Object) this).getStatusEffect(ModEffects.TECH_FITNESS) instanceof StatusEffectInstance techFitness) {
-                this.gainMuscle(8.0F + (techFitness.getAmplifier() + 1.0F) * 3.0F);
-            } else {
-                this.gainMuscle(8.0F);
-            }
-            if (((PlayerEntity) (Object) this) instanceof ServerPlayerEntity serverPlayer) {
-                ModCriteria.HEALTH_CONDITION.trigger(serverPlayer);
-            }
-        }
-        if (stack.isIn(ModItemTags.LIVER_HEALING_I)) {
-            this.gainLiverHealth(0.75F);
-        } else if (stack.isIn(ModItemTags.LIVER_HEALING_II)) {
-            this.gainLiverHealth(8.0F);
-        } else if (stack.isIn(ModItemTags.LIVER_HEALING_III)) {
-            this.gainLiverHealth(100.0F);
-        }
-        if (stack.isIn(ModItemTags.FAT_I)) {
-            this.gainBodyFat(2.0F);
-        } else if (stack.isIn(ModItemTags.FAT_II)) {
-            this.gainBodyFat(5.0F);
-        } else if (stack.isIn(ModItemTags.FAT_III)) {
-            this.gainBodyFat(9.0F);
-        }
     }
 
 // =====================================================================================================================

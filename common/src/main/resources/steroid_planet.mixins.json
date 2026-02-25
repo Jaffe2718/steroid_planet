@@ -13,7 +13,8 @@
     "mixins": [
         "block.BlockMixin",
         "entity.effect.StatusEffectsMixin",
-        "entity.player.PlayerEntityMixin"
+        "entity.player.PlayerEntityMixin",
+        "server.network.ServerPlayerEntityMixin"
     ],
     "injectors": {
         "defaultRequire": 1

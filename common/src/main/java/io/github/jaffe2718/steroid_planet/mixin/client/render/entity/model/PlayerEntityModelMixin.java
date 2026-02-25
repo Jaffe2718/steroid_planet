@@ -1,7 +1,5 @@
 package io.github.jaffe2718.steroid_planet.mixin.client.render.entity.model;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import io.github.jaffe2718.steroid_planet.client.render.entity.model.PlayerEntityModelAccessor;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
@@ -52,11 +50,6 @@ public abstract class PlayerEntityModelMixin implements PlayerEntityModelAccesso
         modelData.getRoot().getChild("head").addChild("pointy_head", ModelPartBuilder.create().uv(8, 2).cuboid(-1.0F, -9.5F, -1.0F, 2.0F, 2.0F, 2.0F, dilation), ModelTransform.NONE);
         modelData.getRoot().getChild("hat").addChild("pointy_hat", ModelPartBuilder.create().uv(40, 2).cuboid(-1.0F, -9.5F, -1.0F, 2.0F, 2.0F, 2.0F, dilation.add(0.25F)), ModelTransform.NONE);
         cir.setReturnValue(modelData);
-    }
-
-    @Inject(method = "getBodyParts", at = @At("RETURN"), cancellable = true)
-    private void getBodyParts(CallbackInfoReturnable<Iterable<ModelPart>> cir) {
-        cir.setReturnValue(Iterables.concat(cir.getReturnValue(), ImmutableList.of(this.pectoralMuscle, this.pectoralMuscleJecket)));
     }
 
     @Inject(method = "setVisible", at = @At("RETURN"))
