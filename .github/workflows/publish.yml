@@ -39,18 +39,14 @@ jobs:
 
             -   name: GitHub Release
                 uses: softprops/action-gh-release@v2
-                env:
-                    MOD_VERSION: ${{ steps.read_gradle_properties.outputs.mod_version }}
-                    MINECRAFT_VERSION: ${{ steps.read_gradle_properties.outputs.minecraft_version }}
-                    PRERELEASE: ${{ steps.read_gradle_properties.outputs.prerelease }}
                 with:
                     body_path: CHANGELOG.md
                     draft: true
                     files: |
                         fabric/build/publish/*.jar
                         neoforge/build/publish/*.jar
-                    prerelease: ${{ env.PRERELEASE }}
-                    tag_name: ${{ env.MOD_VERSION }}+${{ env.MINECRAFT_VERSION }}
+                    prerelease: ${{ steps.read_gradle_properties.outputs.prerelease }}
+                    tag_name: ${{ steps.read_gradle_properties.outputs.mod_version }}+${{ steps.read_gradle_properties.outputs.minecraft_version }}
                     token: ${{ secrets.GH_RELEASE_TOKEN }}
 
             -   name: Modrinth Publish
