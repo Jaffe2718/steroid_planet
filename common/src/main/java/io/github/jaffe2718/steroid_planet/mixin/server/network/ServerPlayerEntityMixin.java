@@ -1,7 +1,7 @@
 package io.github.jaffe2718.steroid_planet.mixin.server.network;
 
 import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
-import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
+import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
 import io.github.jaffe2718.steroid_planet.entity.effect.ModEffects;
 import io.github.jaffe2718.steroid_planet.registry.tag.ModItemTags;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -24,7 +24,7 @@ public class ServerPlayerEntityMixin {
     @Inject(method = "consumeItem", at = @At("HEAD"))
     private void consumeItem(CallbackInfo ci) {
         ServerPlayerEntity thiz = (ServerPlayerEntity) (Object) this;
-        PlayerAttributeAccessor thisAccessor = (PlayerAttributeAccessor) thiz;
+        PlayerEntityExt thisAccessor = (PlayerEntityExt) thiz;
         ItemStack activeStack = thiz.getActiveItem();
         if (thiz.isUsingItem()) {
             if (activeStack.isIn(ModItemTags.PROTEIN)) {

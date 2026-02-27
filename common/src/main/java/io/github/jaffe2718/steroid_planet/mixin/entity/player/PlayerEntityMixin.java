@@ -4,7 +4,7 @@ import io.github.jaffe2718.steroid_planet.SteroidPlanet;
 import io.github.jaffe2718.steroid_planet.advancement.criterion.HealthConditionCriterion;
 import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
 import io.github.jaffe2718.steroid_planet.entity.attribute.ModEntityAttributes;
-import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
+import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
 import io.github.jaffe2718.steroid_planet.entity.damage.DamageTypes;
 import io.github.jaffe2718.steroid_planet.entity.effect.ModEffects;
 import io.github.jaffe2718.steroid_planet.item.SteroidItem;
@@ -22,6 +22,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
@@ -38,7 +39,7 @@ import java.util.Set;
 
 @SuppressWarnings({"AddedMixinMembersNamePattern", "DataFlowIssue"})
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
+public abstract class PlayerEntityMixin implements PlayerEntityExt {
 
     @Unique private static final TrackedData<Float> MUSCLE = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.FLOAT);
 
@@ -169,15 +170,17 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
 
     @Unique
     private void applyLiverPoisoning() {
+        PlayerEntity thiz = (PlayerEntity) (Object) this;
         if (this.getLiverHealth() < HealthConditionCriterion.LIVER_HEALTH_THRESHOLD && this.liverPoisoningTimer > 0) {
             this.liverPoisoningTimer--;
         }
-        if (this.liverPoisoningTimer == 0 && this.getLiverHealth() < HealthConditionCriterion.LIVER_HEALTH_THRESHOLD) {
-            ((PlayerEntity) (Object) this).damage(
-                    new DamageSource(((PlayerEntity) (Object) this)
-                            .getWorld()
-                            .getRegistryManager()
-                            .get(RegistryKeys.DAMAGE_TYPE).entryOf(DamageTypes.LIVER_POISONING)
+        if (this.liverPoisoningTimer == 0 && this.getLiverHealth() < HealthConditionCriterion.LIVER_HEALTH_THRESHOLD
+                && thiz.getWorld() instanceof ServerWorld serverWorld
+        ) {
+            thiz.damage(
+                    serverWorld,
+                    new DamageSource(serverWorld.getRegistryManager()
+                            .getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(DamageTypes.LIVER_POISONING)
                     ),
                     1.0F
             );
@@ -220,7 +223,7 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                 )
         );
         if (muscle > 20.0F) {
-            ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).updateModifier(
+            ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.ATTACK_DAMAGE).updateModifier(
                     new EntityAttributeModifier(
                             SteroidPlanet.id("muscle_damage"),
                             this.getMuscle() / 100.0F,
@@ -228,9 +231,9 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                     )
             );
         } else {
-            ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).removeModifier(SteroidPlanet.id("muscle_damage"));
+            ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.ATTACK_DAMAGE).removeModifier(SteroidPlanet.id("muscle_damage"));
         }
-        ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED).updateModifier(
+        ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).updateModifier(
                 new EntityAttributeModifier(
                         SteroidPlanet.id("muscle_block_break_speed"),
                         this.getMuscle() / 100.0F,
@@ -268,7 +271,7 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                 )
         );
         if (bodyFat > 50.0F) {
-            ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).updateModifier(
+            ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).updateModifier(
                     new EntityAttributeModifier(
                             SteroidPlanet.id("body_fat"),
                             -0.2F,
@@ -276,7 +279,7 @@ public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
                     )
             );
         } else {
-            ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).removeModifier(SteroidPlanet.id("body_fat"));
+            ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).removeModifier(SteroidPlanet.id("body_fat"));
         }
     }
 

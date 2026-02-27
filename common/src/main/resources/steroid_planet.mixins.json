@@ -8,12 +8,14 @@
         "client.render.entity.PlayerEntityRendererMixin",
         "client.render.entity.feature.ArmorFeatureRendererMixin",
         "client.render.entity.model.ArmorEntityModelMixin",
-        "client.render.entity.model.PlayerEntityModelMixin"
+        "client.render.entity.model.PlayerEntityModelMixin",
+        "client.render.entity.state.PlayerEntityRenderStateMixin"
     ],
     "mixins": [
         "block.BlockMixin",
         "entity.effect.StatusEffectsMixin",
         "entity.player.PlayerEntityMixin",
+        "item.ItemsMixin",
         "server.network.ServerPlayerEntityMixin"
     ],
     "injectors": {

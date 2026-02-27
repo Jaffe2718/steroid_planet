@@ -2,7 +2,7 @@ package io.github.jaffe2718.steroid_planet.advancement.criterion;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
+import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
 import io.github.jaffe2718.steroid_planet.item.SteroidItem;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.item.Item;
@@ -21,7 +21,7 @@ public class SteroidRecordsCriterion extends AbstractCriterion<SteroidRecordsCri
     }
 
     public void trigger(ServerPlayerEntity player) {
-        List<Item> records = ((PlayerAttributeAccessor) player).querySteroids()
+        List<Item> records = ((PlayerEntityExt) player).querySteroids()
                 .stream()
                 .map(Registries.ITEM::get)
                 .filter(item -> item instanceof SteroidItem)

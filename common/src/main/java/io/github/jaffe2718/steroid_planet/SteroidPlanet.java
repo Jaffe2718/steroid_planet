@@ -5,7 +5,6 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import dev.architectury.registry.registries.RegistrarManager;
 import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
-import io.github.jaffe2718.steroid_planet.entity.effect.ModEffects;
 import io.github.jaffe2718.steroid_planet.item.ModItems;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Contract;
@@ -22,7 +21,7 @@ public final class SteroidPlanet {
 
     public static void init() {
         // Write common init code here.
-        ModCriteria.init();
         ModItems.init();
+        ModCriteria.init();
     }
 }

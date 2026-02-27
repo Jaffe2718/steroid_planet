@@ -1,9 +1,10 @@
 package io.github.jaffe2718.steroid_planet.mixin.client.gui.hud;
 
 import io.github.jaffe2718.steroid_planet.SteroidPlanet;
-import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
+import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -54,32 +55,32 @@ public abstract class InGameHudMixin {
      */
     @Unique
     private static void steroid_planet$renderMuscleBar(DrawContext context, PlayerEntity player, int x, int y) {
-        float muscleValue = ((PlayerAttributeAccessor) player).getMuscle();
-        float bodyFatValue = ((PlayerAttributeAccessor) player).getBodyFat();
+        float muscleValue = ((PlayerEntityExt) player).getMuscle();
+        float bodyFatValue = ((PlayerEntityExt) player).getBodyFat();
         int bodyFatIcons = (int) bodyFatValue / 10;
         int fullMuscleIcons = Math.round(muscleValue / 10);
         boolean halfMuscle = 0 < (muscleValue % 10) && (muscleValue % 10) < 5;
         for (int i = 0; i < bodyFatIcons; i++) {
-            context.drawGuiTexture(BODY_FAT_TEXTURE, x + i * 8, y, 9, 9);
+            context.drawGuiTexture(RenderLayer::getGuiTextured,BODY_FAT_TEXTURE, x + i * 8, y, 9, 9);
         }
         for (int i = bodyFatIcons; i < bodyFatIcons + fullMuscleIcons; i++) {
-            context.drawGuiTexture(MUSCLE_FULL_TEXTURE, x + i * 8, y, 9, 9);
+            context.drawGuiTexture(RenderLayer::getGuiTextured, MUSCLE_FULL_TEXTURE, x + i * 8, y, 9, 9);
         }
         if (halfMuscle) {
-            context.drawGuiTexture(MUSCLE_HALF_TEXTURE, x + (bodyFatIcons + fullMuscleIcons) * 8, y, 9, 9);
+            context.drawGuiTexture(RenderLayer::getGuiTextured,MUSCLE_HALF_TEXTURE, x + (bodyFatIcons + fullMuscleIcons) * 8, y, 9, 9);
         }
     }
 
     @Unique
     private static void steroid_planet$renderLiverHealthBar(DrawContext context, PlayerEntity player, int x, int y) {
-        float liverValue = ((PlayerAttributeAccessor) player).getLiverHealth();
+        float liverValue = ((PlayerEntityExt) player).getLiverHealth();
         int fullLiver = Math.round(liverValue / 10);
         boolean halfLiver = 1E-3 < (liverValue % 10) && (liverValue % 10) < 5;
         for (int i = 0; i < fullLiver; i++) {
-            context.drawGuiTexture(LIVER_HEALTH_FULL_TEXTURE, x - i * 8, y, 9, 9);
+            context.drawGuiTexture(RenderLayer::getGuiTextured, LIVER_HEALTH_FULL_TEXTURE, x - i * 8, y, 9, 9);
         }
         if (halfLiver) {
-            context.drawGuiTexture(LIVER_HEALTH_HALF_TEXTURE, x - fullLiver * 8, y, 9, 9);
+            context.drawGuiTexture(RenderLayer::getGuiTextured, LIVER_HEALTH_HALF_TEXTURE, x - fullLiver * 8, y, 9, 9);
         }
     }
 

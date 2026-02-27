@@ -1,6 +1,6 @@
 package io.github.jaffe2718.steroid_planet.mixin.client.render.entity.model;
 
-import io.github.jaffe2718.steroid_planet.client.render.entity.model.BaseEntityModelAccessor;
+import io.github.jaffe2718.steroid_planet.client.render.entity.model.BipedEntityModelExt;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.ArmorEntityModel;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(ArmorEntityModel.class)
-public abstract class ArmorEntityModelMixin implements BaseEntityModelAccessor {
+public abstract class ArmorEntityModelMixin implements BipedEntityModelExt {
 
     @Unique
     private ModelPart pectoralMuscle;

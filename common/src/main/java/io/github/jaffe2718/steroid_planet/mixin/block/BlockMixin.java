@@ -1,7 +1,7 @@
 package io.github.jaffe2718.steroid_planet.mixin.block;
 
 import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
-import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
+import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
 import io.github.jaffe2718.steroid_planet.entity.effect.ModEffects;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,9 +23,9 @@ public class BlockMixin {
     @Inject(method = "afterBreak", at = @At("RETURN"))
     private void afterBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, BlockEntity blockEntity, ItemStack tool, CallbackInfo ci) {
         if (player.getStatusEffect(ModEffects.TECH_FITNESS) instanceof StatusEffectInstance techFitness) {
-            ((PlayerAttributeAccessor) player).gainMuscle((techFitness.getAmplifier() + 1.0F) * 3.0F);
+            ((PlayerEntityExt) player).gainMuscle((techFitness.getAmplifier() + 1.0F) * 3.0F);
         } else {
-            ((PlayerAttributeAccessor) player).gainMuscle(1F);
+            ((PlayerEntityExt) player).gainMuscle(1F);
         }
         if (player instanceof ServerPlayerEntity serverPlayer) {
             ModCriteria.HEALTH_CONDITION.trigger(serverPlayer);

@@ -9,8 +9,8 @@ import net.minecraft.registry.entry.RegistryEntry;
 
 public abstract class ModEntityAttributes {
 
-    public static RegistryEntry<EntityAttribute> MAX_LIVER_HEALTH = register("player.max_liver_health", new ClampedEntityAttribute("attribute.name.steroid_planet.player.max_liver_health", 100.0F, 0.0F, 100.0F).setTracked(true));
-    public static RegistryEntry<EntityAttribute> MUSCLE_AND_FAT_CAPACITY = register("player.muscle_and_fat_capacity", new ClampedEntityAttribute("attribute.name.steroid_planet.player.muscle_and_fat_capacity", 100.0F, 30.0F, 100.0F).setTracked(true));
+    public static final RegistryEntry<EntityAttribute> MAX_LIVER_HEALTH = register("player.max_liver_health", new ClampedEntityAttribute("attribute.name.steroid_planet.player.max_liver_health", 100.0F, 0.0F, 100.0F).setTracked(true));
+    public static final RegistryEntry<EntityAttribute> MUSCLE_AND_FAT_CAPACITY = register("player.muscle_and_fat_capacity", new ClampedEntityAttribute("attribute.name.steroid_planet.player.muscle_and_fat_capacity", 100.0F, 30.0F, 100.0F).setTracked(true));
 
 
     private static RegistryEntry<EntityAttribute> register(final String name, EntityAttribute attribute) {
