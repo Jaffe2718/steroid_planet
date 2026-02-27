@@ -23,21 +23,21 @@ jobs:
             -   name: Grant execute permission for gradlew
                 run: chmod +x gradlew
 
-            -   name: Build Mod
-                run: ./gradlew build --stacktrace
-
             -   name: Read Gradle Properties
                 id: read_gradle_properties
                 run: |
-                    echo "$(grep '^[[:space:]]*mod_version' gradle.properties)"
-                    echo "$(grep '^[[:space:]]*minecraft_version' gradle.properties)"
-                    echo "$(grep '^[[:space:]]*mod_version' gradle.properties)" >> $GITHUB_OUTPUT
-                    echo "$(grep '^[[:space:]]*minecraft_version' gradle.properties)" >> $GITHUB_OUTPUT
-                    if [[ "$(grep '^[[:space:]]*mod_version' gradle.properties | sed -e 's/^[^=]*=[[:space:]]*//' -e 's/[[:space:]]*$//')" =~ -[^[:space:]]+ ]]; then
+                    mod_version=$(grep '^[[:space:]]*mod_version' gradle.properties | sed -e 's/^[^=]*=[[:space:]]*//' -e 's/[[:space:]]*$//')
+                    echo "mod_version=$mod_version" >> $GITHUB_OUTPUT
+                    minecraft_version=$(grep '^[[:space:]]*minecraft_version' gradle.properties | sed -e 's/^[^=]*=[[:space:]]*//' -e 's/[[:space:]]*$//')
+                    echo "minecraft_version=$minecraft_version" >> $GITHUB_OUTPUT
+                    if [[ "$mod_version" =~ -[^[:space:]]+ ]]; then
                         echo "prerelease=true" >> $GITHUB_OUTPUT
                     else
                         echo "prerelease=false" >> $GITHUB_OUTPUT
                     fi
+
+            -   name: Build Mod
+                run: ./gradlew build --stacktrace
 
             -   name: GitHub Release
                 uses: softprops/action-gh-release@v2
