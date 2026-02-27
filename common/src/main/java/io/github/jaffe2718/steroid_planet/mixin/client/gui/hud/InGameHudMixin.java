@@ -1,7 +1,7 @@
 package io.github.jaffe2718.steroid_planet.mixin.client.gui.hud;
 
 import io.github.jaffe2718.steroid_planet.SteroidPlanet;
-import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
+import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.Entity;
@@ -54,8 +54,8 @@ public abstract class InGameHudMixin {
      */
     @Unique
     private static void steroid_planet$renderMuscleBar(DrawContext context, PlayerEntity player, int x, int y) {
-        float muscleValue = ((PlayerAttributeAccessor) player).getMuscle();
-        float bodyFatValue = ((PlayerAttributeAccessor) player).getBodyFat();
+        float muscleValue = ((PlayerEntityExt) player).getMuscle();
+        float bodyFatValue = ((PlayerEntityExt) player).getBodyFat();
         int bodyFatIcons = (int) bodyFatValue / 10;
         int fullMuscleIcons = Math.round(muscleValue / 10);
         boolean halfMuscle = 0 < (muscleValue % 10) && (muscleValue % 10) < 5;
@@ -72,7 +72,7 @@ public abstract class InGameHudMixin {
 
     @Unique
     private static void steroid_planet$renderLiverHealthBar(DrawContext context, PlayerEntity player, int x, int y) {
-        float liverValue = ((PlayerAttributeAccessor) player).getLiverHealth();
+        float liverValue = ((PlayerEntityExt) player).getLiverHealth();
         int fullLiver = Math.round(liverValue / 10);
         boolean halfLiver = 1E-3 < (liverValue % 10) && (liverValue % 10) < 5;
         for (int i = 0; i < fullLiver; i++) {

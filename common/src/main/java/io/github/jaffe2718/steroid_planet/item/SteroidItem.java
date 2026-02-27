@@ -1,7 +1,7 @@
 package io.github.jaffe2718.steroid_planet.item;
 
 import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
-import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
+import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
 import io.github.jaffe2718.steroid_planet.entity.effect.ModEffects;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.component.type.PotionContentsComponent;
@@ -39,8 +39,8 @@ public class SteroidItem extends Item {
 
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         if (user instanceof PlayerEntity player) {
-            ((PlayerAttributeAccessor) player).lossLiverHealth(this.liverDamage);
-            ((PlayerAttributeAccessor) player).recordSteroid(this);
+            ((PlayerEntityExt) player).lossLiverHealth(this.liverDamage);
+            ((PlayerEntityExt) player).recordSteroid(this);
             if (player instanceof ServerPlayerEntity sPlayer) {
                 Criteria.CONSUME_ITEM.trigger(sPlayer, stack);
                 ModCriteria.HEALTH_CONDITION.trigger(sPlayer);

@@ -4,7 +4,7 @@ import io.github.jaffe2718.steroid_planet.SteroidPlanet;
 import io.github.jaffe2718.steroid_planet.advancement.criterion.HealthConditionCriterion;
 import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
 import io.github.jaffe2718.steroid_planet.entity.attribute.ModEntityAttributes;
-import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
+import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
 import io.github.jaffe2718.steroid_planet.entity.damage.DamageTypes;
 import io.github.jaffe2718.steroid_planet.entity.effect.ModEffects;
 import io.github.jaffe2718.steroid_planet.item.SteroidItem;
@@ -38,7 +38,7 @@ import java.util.Set;
 
 @SuppressWarnings({"AddedMixinMembersNamePattern", "DataFlowIssue"})
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin implements PlayerAttributeAccessor {
+public abstract class PlayerEntityMixin implements PlayerEntityExt {
 
     @Unique private static final TrackedData<Float> MUSCLE = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.FLOAT);
 

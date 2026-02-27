@@ -2,7 +2,7 @@ package io.github.jaffe2718.steroid_planet.advancement.criterion;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
+import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.predicate.entity.LootContextPredicate;
@@ -21,9 +21,9 @@ public class HealthConditionCriterion extends AbstractCriterion<HealthConditionC
     }
 
     public void trigger(ServerPlayerEntity player) {
-        float playerLiverHealth = ((PlayerAttributeAccessor) player).getLiverHealth();
-        float playerMuscle = ((PlayerAttributeAccessor) player).getMuscle();
-        float playerBodyFat = ((PlayerAttributeAccessor) player).getBodyFat();
+        float playerLiverHealth = ((PlayerEntityExt) player).getLiverHealth();
+        float playerMuscle = ((PlayerEntityExt) player).getMuscle();
+        float playerBodyFat = ((PlayerEntityExt) player).getBodyFat();
         this.trigger(player, (conditions) -> conditions.matches(playerLiverHealth, playerMuscle, playerBodyFat));
     }
 

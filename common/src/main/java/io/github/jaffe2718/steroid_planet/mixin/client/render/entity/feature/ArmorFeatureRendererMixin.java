@@ -1,8 +1,8 @@
 package io.github.jaffe2718.steroid_planet.mixin.client.render.entity.feature;
 
 import io.github.jaffe2718.steroid_planet.advancement.criterion.HealthConditionCriterion;
-import io.github.jaffe2718.steroid_planet.client.render.entity.model.BaseEntityModelAccessor;
-import io.github.jaffe2718.steroid_planet.entity.attribute.PlayerAttributeAccessor;
+import io.github.jaffe2718.steroid_planet.client.render.entity.model.BipedEntityModelExt;
+import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.render.entity.model.ArmorEntityModel;
@@ -30,16 +30,16 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, A extend
         if (this.getModel(EquipmentSlot.CHEST) instanceof ArmorEntityModel<?>
                 && livingEntity.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof Equipment equipment
                 && equipment.getSlotType() == EquipmentSlot.CHEST) {
-            BaseEntityModelAccessor chestplateModel = (BaseEntityModelAccessor) this.getModel(EquipmentSlot.CHEST);
+            BipedEntityModelExt chestplateModel = (BipedEntityModelExt) this.getModel(EquipmentSlot.CHEST);
             chestplateModel.getPectoralMuscle().visible = livingEntity instanceof PlayerEntity player
-                    && ((PlayerAttributeAccessor) player).getMuscle() >= HealthConditionCriterion.MUSCLE_THRESHOLD;
+                    && ((PlayerEntityExt) player).getMuscle() >= HealthConditionCriterion.MUSCLE_THRESHOLD;
         }
         if (this.getModel(EquipmentSlot.HEAD) instanceof ArmorEntityModel<?>
                 && livingEntity.getEquippedStack(EquipmentSlot.HEAD).getItem() instanceof Equipment equipment
                 && equipment.getSlotType() == EquipmentSlot.HEAD) {
-            BaseEntityModelAccessor helmetModel = (BaseEntityModelAccessor) this.getModel(EquipmentSlot.HEAD);
+            BipedEntityModelExt helmetModel = (BipedEntityModelExt) this.getModel(EquipmentSlot.HEAD);
             helmetModel.getPointyHead().visible = livingEntity instanceof PlayerEntity player
-                    && ((PlayerAttributeAccessor) player).getLiverHealth() < HealthConditionCriterion.LIVER_HEALTH_THRESHOLD;
+                    && ((PlayerEntityExt) player).getLiverHealth() < HealthConditionCriterion.LIVER_HEALTH_THRESHOLD;
         }
     }
 

@@ -1,6 +1,6 @@
 package io.github.jaffe2718.steroid_planet.mixin.client.render.entity.model;
 
-import io.github.jaffe2718.steroid_planet.client.render.entity.model.PlayerEntityModelAccessor;
+import io.github.jaffe2718.steroid_planet.client.render.entity.model.PlayerEntityModelExt;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import org.spongepowered.asm.mixin.Final;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(PlayerEntityModel.class)
-public abstract class PlayerEntityModelMixin implements PlayerEntityModelAccessor {
+public abstract class PlayerEntityModelMixin implements PlayerEntityModelExt {
 
     @Unique
     private ModelPart pectoralMuscle;
@@ -68,7 +68,7 @@ public abstract class PlayerEntityModelMixin implements PlayerEntityModelAccesso
 
     @Unique
     @Override
-    public ModelPart getPectoralMuscleJecket() {
+    public ModelPart getPectoralMuscleJacket() {
         return this.pectoralMuscleJecket;
     }
 

@@ -1,11 +1,11 @@
-package io.github.jaffe2718.steroid_planet.entity.attribute;
+package io.github.jaffe2718.steroid_planet.entity.player;
 
 import io.github.jaffe2718.steroid_planet.item.SteroidItem;
 import net.minecraft.util.Identifier;
 
 import java.util.Set;
 
-public interface PlayerAttributeAccessor {
+public interface PlayerEntityExt {
 
     float getMuscle();
     void setMuscle(float muscle);
