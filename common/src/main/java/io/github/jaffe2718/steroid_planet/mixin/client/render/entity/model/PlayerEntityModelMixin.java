@@ -71,10 +71,15 @@ public abstract class PlayerEntityModelMixin implements BipedEntityModelExt {
     @Inject(method = "setAngles", at = @At("RETURN"))
     private void setAngles(PlayerEntityRenderState playerEntityRenderState, CallbackInfo ci) {
         PlayerEntityRenderStateExt stateExt = (PlayerEntityRenderStateExt) playerEntityRenderState;
-        this.pectoralMuscle.visible = stateExt.pectoralMuscleVisible();
-        this.pectoralMuscleJacket.visible = stateExt.pectoralMuscleJecketVisible();
-        this.pointyHead.visible = stateExt.pointyHeadVisible();
-        this.pointyHat.visible = stateExt.pointyHatVisible();
+        this.pectoralMuscle.visible = stateExt.strong();
+        this.pectoralMuscleJacket.visible = stateExt.strong();
+        this.pointyHead.visible = stateExt.pointyHead();
+        this.pointyHat.visible = stateExt.pointyHead();
+        if (stateExt.strong()) {
+            this.strengthenArms();
+        } else {
+            this.resetArms();
+        }
     }
 
     @Unique

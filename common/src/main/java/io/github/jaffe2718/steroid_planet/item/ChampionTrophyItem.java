@@ -5,6 +5,7 @@ import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
 import io.github.jaffe2718.steroid_planet.entity.effect.ModEffects;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.component.type.TooltipDisplayComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,6 +22,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ChampionTrophyItem extends Item {
 
@@ -60,9 +62,10 @@ public class ChampionTrophyItem extends Item {
         return ItemUsage.consumeHeldItem(world, user, hand);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        PotionContentsComponent.buildTooltip(List.of(new StatusEffectInstance(ModEffects.CONTEST_PREP, 9600, 0, false, false, true)), tooltip::add, 1.0F, context.getUpdateTickRate());
-        tooltip.add(Text.translatable("tooltip.item.steroid_planet.steroid.liver_healing", LIVER_HEALING).withColor(0x55FF55));
+    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
+        PotionContentsComponent.buildTooltip(List.of(new StatusEffectInstance(ModEffects.CONTEST_PREP, 9600, 0, false, false, true)), textConsumer, 1.0F, context.getUpdateTickRate());
+        textConsumer.accept(Text.translatable("tooltip.item.steroid_planet.steroid.liver_healing", LIVER_HEALING).withColor(0x55FF55));
     }
 }

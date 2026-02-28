@@ -34,13 +34,13 @@ public abstract class ArmorFeatureRendererMixin<S extends BipedEntityRenderState
                 BipedEntityModelExt helmetModel = (BipedEntityModelExt) armorModel;
                 EquippableComponent equippableComponent = bipedEntityRenderState.equippedHeadStack.get(DataComponentTypes.EQUIPPABLE);
                 helmetModel.getPointyHead().visible = equippableComponent != null
-                        && steroid_planet$hasModel(equippableComponent, EquipmentSlot.HEAD) && stateExt.pointyHeadVisible();
+                        && steroid_planet$hasModel(equippableComponent, EquipmentSlot.HEAD) && stateExt.pointyHead();
             }
             if (this.getModel(bipedEntityRenderState, EquipmentSlot.CHEST) instanceof ArmorEntityModel<?> armorModel) {
                 BipedEntityModelExt chestplateModel = (BipedEntityModelExt) armorModel;
                 EquippableComponent equippableComponent = bipedEntityRenderState.equippedChestStack.get(DataComponentTypes.EQUIPPABLE);
                 chestplateModel.getPectoralMuscle().visible = equippableComponent != null
-                        && steroid_planet$hasModel(equippableComponent, EquipmentSlot.CHEST) && stateExt.pectoralMuscleVisible();
+                        && steroid_planet$hasModel(equippableComponent, EquipmentSlot.CHEST) && stateExt.strong();
                 if (chestplateModel.getPectoralMuscle().visible) {
                     chestplateModel.strengthenArms();
                 } else {

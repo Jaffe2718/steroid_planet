@@ -19,9 +19,7 @@ public abstract class PlayerEntityRendererMixin {
     private void updateRenderState(AbstractClientPlayerEntity abstractClientPlayerEntity, PlayerEntityRenderState playerEntityRenderState, float f, CallbackInfo ci) {
         PlayerEntityExt player = (PlayerEntityExt) abstractClientPlayerEntity;
         PlayerEntityRenderStateExt stateExt = (PlayerEntityRenderStateExt) playerEntityRenderState;
-        stateExt.pectoralMuscleVisible(player.getMuscle() >= HealthConditionCriterion.MUSCLE_THRESHOLD);
-        stateExt.pectoralMuscleJecketVisible(player.getMuscle() >= HealthConditionCriterion.MUSCLE_THRESHOLD);
-        stateExt.pointyHeadVisible(player.getLiverHealth() < HealthConditionCriterion.LIVER_HEALTH_THRESHOLD);
-        stateExt.pointyHatVisible(player.getMuscle() < HealthConditionCriterion.LIVER_HEALTH_THRESHOLD);
+        stateExt.strong(player.getMuscle() >= HealthConditionCriterion.MUSCLE_THRESHOLD);
+        stateExt.pointyHead(player.getLiverHealth() < HealthConditionCriterion.LIVER_HEALTH_THRESHOLD);
     }
 }
