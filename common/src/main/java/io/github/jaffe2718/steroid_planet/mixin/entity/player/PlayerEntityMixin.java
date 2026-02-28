@@ -51,7 +51,7 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
      * Record the steroids the player is using.
      * id -> boolean
      */
-    @Unique private static final TrackedData<NbtCompound> STEROID_USING_RECORDS = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
+    @Unique private NbtCompound steroid_planet$steroidUsingRecords = new NbtCompound();
 
     @Unique private int liverPoisoningTimer = 0;
 
@@ -60,7 +60,6 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
         builder.add(MUSCLE, 0.0F);
         builder.add(LIVER_HEALTH, 100.0F);
         builder.add(BODY_FAT, 30.0F);
-        builder.add(STEROID_USING_RECORDS, new NbtCompound());
     }
 
     @Inject(method = "createPlayerAttributes", at = @At("RETURN"), cancellable = true)
@@ -92,7 +91,7 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
             this.liverPoisoningTimer = nbt.getInt("LiverPoisoningTimer");
         }
         if (nbt.contains("SteroidUsingRecords", 10)) {   // NbtType.COMPOUND
-            ((PlayerEntity) (Object) this).getDataTracker().set(STEROID_USING_RECORDS, nbt.getCompound("SteroidUsingRecords"));
+            this.steroid_planet$steroidUsingRecords = nbt.getCompound("SteroidUsingRecords");
         }
     }
 
@@ -102,7 +101,7 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
         nbt.putFloat("LiverHealth", this.getLiverHealth());
         nbt.putFloat("BodyFat", this.getBodyFat());
         nbt.putInt("LiverPoisoningTimer", this.liverPoisoningTimer);
-        nbt.put("SteroidUsingRecords", ((PlayerEntity) (Object) this).getDataTracker().get(STEROID_USING_RECORDS));
+        nbt.put("SteroidUsingRecords", this.steroid_planet$steroidUsingRecords);
     }
 
     /**
@@ -287,10 +286,9 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
     @Override
     public Set<Identifier> querySteroids() {
         Set<Identifier> steroidIds = new HashSet<>();
-        NbtCompound steroidRecords = ((PlayerEntity) (Object) this).getDataTracker().get(STEROID_USING_RECORDS);
-        for (String key : steroidRecords.getKeys()) {
+        for (String key : this.steroid_planet$steroidUsingRecords.getKeys()) {
             Identifier sid = Identifier.tryParse(key);
-            if (sid != null && steroidRecords.getBoolean(key) && Registries.ITEM.containsId(sid)) {
+            if (sid != null && this.steroid_planet$steroidUsingRecords.getBoolean(key) && Registries.ITEM.containsId(sid)) {
                 steroidIds.add(sid);
             }
         }
@@ -300,11 +298,6 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
     @Unique
     @Override
     public void recordSteroid(SteroidItem steroid) {
-        Identifier sid = Registries.ITEM.getId(steroid);
-        NbtCompound steroidRecords = ((PlayerEntity) (Object) this).getDataTracker().get(STEROID_USING_RECORDS);
-        if (sid != null && !steroidRecords.contains(sid.toString())) {
-            steroidRecords.putBoolean(sid.toString(), true);
-        }
-        ((PlayerEntity) (Object) this).getDataTracker().set(STEROID_USING_RECORDS, steroidRecords);
+        this.steroid_planet$steroidUsingRecords.putBoolean(Registries.ITEM.getId(steroid).toString(), true);
     }
 }
