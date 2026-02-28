@@ -54,7 +54,6 @@ processResources {
 sourcesJar {
     dependsOn project(":common").sourcesJar
     from project(":common").sourcesJar.archiveFile.map { zipTree(it) }
-    exclude '**/steroid_planet.mixins.json'
 }
 
 shadowJar {
@@ -68,7 +67,6 @@ remapJar {
     from(rootDir.toPath().toString() + "/LICENSE") {
         rename { "${it}_${rootProject.archives_name}"}
     }
-    exclude '**/steroid_planet.mixins.json'
     doLast {
         def publishDir = layout.buildDirectory.dir("publish").get().asFile
         publishDir.mkdirs()

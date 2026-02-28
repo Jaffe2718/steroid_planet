@@ -36,4 +36,4 @@ ordering = "AFTER"
 side = "BOTH"
 
 [[mixins]]
-config = "steroid_planet.neoforge.mixins.json"
+config = "steroid_planet.mixins.json"

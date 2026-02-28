@@ -1,21 +1,21 @@
 package io.github.jaffe2718.steroid_planet.mixin.entity.player;
 
-import com.mojang.serialization.Codec;
 import io.github.jaffe2718.steroid_planet.SteroidPlanet;
 import io.github.jaffe2718.steroid_planet.advancement.criterion.HealthConditionCriterion;
 import io.github.jaffe2718.steroid_planet.advancement.criterion.ModCriteria;
 import io.github.jaffe2718.steroid_planet.entity.attribute.ModEntityAttributes;
-import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
 import io.github.jaffe2718.steroid_planet.entity.damage.DamageTypes;
 import io.github.jaffe2718.steroid_planet.entity.effect.ModEffects;
+import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
 import io.github.jaffe2718.steroid_planet.item.SteroidItem;
-import io.github.jaffe2718.steroid_planet.neoforge.SteroidPlanetNeoForge;
-import io.github.jaffe2718.steroid_planet.neoforge.attachment.FloatSyncHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -28,9 +28,6 @@ import net.minecraft.storage.WriteView;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.attachment.AttachmentType;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -41,43 +38,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Supplier;
 
 @SuppressWarnings({"DataFlowIssue", "AddedMixinMembersNamePattern"})
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin implements PlayerEntityExt {
 
-    @Unique
-    private static final Supplier<AttachmentType<Float>> steroid_planet$MUSCLE = SteroidPlanetNeoForge.ATTACHMENT_TYPES.register(
-            "muscle", () -> AttachmentType.builder(() -> 0.0F)
-                    .serialize(Codec.FLOAT.fieldOf("Muscle"))
-                    .sync(new FloatSyncHandler())
-                    .build()
-    );
+    @Unique private static final TrackedData<Float> steroid_planet$MUSCLE = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.FLOAT);
 
-    @Unique
-    private static final Supplier<AttachmentType<Float>> steroid_planet$LIVER_HEALTH = SteroidPlanetNeoForge.ATTACHMENT_TYPES.register(
-            "liver_health", () -> AttachmentType.builder(() -> 100.0F)
-                    .serialize(Codec.FLOAT.fieldOf("LiverHealth"))
-                    .sync(new FloatSyncHandler())
-                    .build()
-    );
+    @Unique private static final TrackedData<Float> steroid_planet$LIVER_HEALTH = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.FLOAT);
 
-    @Unique
-    private static final Supplier<AttachmentType<Float>> steroid_planet$BODY_FAT = SteroidPlanetNeoForge.ATTACHMENT_TYPES.register(
-            "body_fat", () -> AttachmentType.builder(() -> 30.0F)
-                    .serialize(Codec.FLOAT.fieldOf("BodyFat"))
-                    .sync(new FloatSyncHandler())
-                    .build()
-    );
+    @Unique private static final TrackedData<Float> steroid_planet$BODY_FAT = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.FLOAT);  // default value is 30.0F
 
-    @Unique   // id -> boolean
-    @OnlyIn(Dist.DEDICATED_SERVER)
-    private NbtCompound steroid_planet$steroidUsingRecords = new NbtCompound();
+    // id -> boolean
+    @Unique private NbtCompound steroid_planet$steroidUsingRecords = new NbtCompound();
 
-    @Unique
-    @OnlyIn(Dist.DEDICATED_SERVER)
-    private int steroid_planet$liverPoisoningTimer = 0;
+    @Unique private int steroid_planet$liverPoisoningTimer = 0;
+
+    @Inject(method = "initDataTracker", at = @At("RETURN"))
+    private void initDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
+        builder.add(steroid_planet$MUSCLE, 0.0F);
+        builder.add(steroid_planet$LIVER_HEALTH, 100.0F);
+        builder.add(steroid_planet$BODY_FAT, 30.0F);
+    }
 
     @Inject(method = "createPlayerAttributes", at = @At("RETURN"), cancellable = true)
     private static void createPlayerAttributes(@NotNull CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
@@ -160,7 +142,7 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
         if (((PlayerEntity) (Object) this).getWorld().getDifficulty() == Difficulty.PEACEFUL) {
             this.gainLiverHealth(1.0F);
         }
-        this.steroid_planet$applyLiverPoisoning();
+        this.applyLiverPoisoning();
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;wakeUp(ZZ)V", shift = At.Shift.AFTER))
@@ -171,12 +153,7 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
 // =====================================================================================================================
 
     @Unique
-    private <T> T steroid_planet$getDataOrElse(Supplier<AttachmentType<T>> type, T defaultValue) {
-        return ((PlayerEntity) (Object) this).getExistingData(type).orElse(defaultValue);
-    }
-
-    @Unique
-    private void steroid_planet$applyLiverPoisoning() {
+    private void applyLiverPoisoning() {
         PlayerEntity thiz = (PlayerEntity) (Object) this;
         if (this.getLiverHealth() < HealthConditionCriterion.LIVER_HEALTH_THRESHOLD && this.steroid_planet$liverPoisoningTimer > 0) {
             this.steroid_planet$liverPoisoningTimer--;
@@ -206,13 +183,13 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
     @Unique
     @Override
     public float getMuscle() {
-        return this.steroid_planet$getDataOrElse(steroid_planet$MUSCLE, 0.0F);
+        return ((PlayerEntity) (Object) this).getDataTracker().get(steroid_planet$MUSCLE);
     }
 
     @Unique
     @Override
     public float getLiverHealth() {
-        return this.steroid_planet$getDataOrElse(steroid_planet$LIVER_HEALTH, 100.0F);
+        return ((PlayerEntity) (Object) this).getDataTracker().get(steroid_planet$LIVER_HEALTH);
     }
 
     /**
@@ -221,12 +198,11 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
      */
     @Unique
     @Override
-    @OnlyIn(Dist.DEDICATED_SERVER)
     public void setMuscle(float muscle) {
         muscle = MathHelper.clamp(muscle, 0.0F,
                 (float) ((PlayerEntity) (Object) this).getAttributeValue(ModEntityAttributes.MUSCLE_AND_FAT_CAPACITY) - this.getBodyFat()
         );
-        ((PlayerEntity) (Object) this).setData(steroid_planet$MUSCLE, muscle);
+        ((PlayerEntity) (Object) this).getDataTracker().set(steroid_planet$MUSCLE, muscle);
         if (muscle > 20.0F) {
             ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.ATTACK_DAMAGE).updateModifier(
                     new EntityAttributeModifier(
@@ -249,9 +225,8 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
 
     @Unique
     @Override
-    @OnlyIn(Dist.DEDICATED_SERVER)
     public void setLiverHealth(float liverHealth) {
-        ((PlayerEntity) (Object) this).setData(
+        ((PlayerEntity) (Object) this).getDataTracker().set(
                 steroid_planet$LIVER_HEALTH,
                 MathHelper.clamp(liverHealth,
                         0.0F,
@@ -263,17 +238,16 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
     @Unique
     @Override
     public float getBodyFat() {
-        return this.steroid_planet$getDataOrElse(steroid_planet$BODY_FAT, 0.0F);
+        return ((PlayerEntity) (Object) this).getDataTracker().get(steroid_planet$BODY_FAT);
     }
 
     @Unique
     @Override
-    @OnlyIn(Dist.DEDICATED_SERVER)
     public void setBodyFat(float bodyFat) {
         bodyFat = MathHelper.clamp(bodyFat, 0.0F,
                 (float) ((PlayerEntity) (Object) this).getAttributeValue(ModEntityAttributes.MUSCLE_AND_FAT_CAPACITY) - this.getMuscle()
         );
-        ((PlayerEntity) (Object) this).setData(steroid_planet$BODY_FAT, bodyFat);
+        ((PlayerEntity) (Object) this).getDataTracker().set(steroid_planet$BODY_FAT, bodyFat);
         if (bodyFat > 50.0F) {
             ((PlayerEntity) (Object) this).getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).updateModifier(
                     new EntityAttributeModifier(
@@ -289,7 +263,6 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
 
     @Unique
     @Override
-    @OnlyIn(Dist.DEDICATED_SERVER)
     public Set<Identifier> querySteroids() {
         Set<Identifier> steroidIds = new HashSet<>();
         for (String key : this.steroid_planet$steroidUsingRecords.getKeys()) {
@@ -303,7 +276,6 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
 
     @Unique
     @Override
-    @OnlyIn(Dist.DEDICATED_SERVER)
     public void recordSteroid(SteroidItem steroid) {
         this.steroid_planet$steroidUsingRecords.putBoolean(Registries.ITEM.getId(steroid).toString(), true);
     }
