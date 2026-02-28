@@ -78,7 +78,7 @@ modrinth {
     versionNumber = rootProject.mod_version + "-fabric"
     versionType = rootProject.getPublishVersionType()
     uploadFile = remapJar
-    loaders = ["fabric"]
+    loaders = ["fabric", "quilt"]
     dependencies {
         required.project 'architectury-api'
     }
