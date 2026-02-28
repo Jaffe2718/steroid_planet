@@ -2,9 +2,9 @@ package io.github.jaffe2718.steroid_planet.mixin.client.gui.hud;
 
 import io.github.jaffe2718.steroid_planet.SteroidPlanet;
 import io.github.jaffe2718.steroid_planet.entity.player.PlayerEntityExt;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -61,13 +61,13 @@ public abstract class InGameHudMixin {
         int fullMuscleIcons = Math.round(muscleValue / 10);
         boolean halfMuscle = 0 < (muscleValue % 10) && (muscleValue % 10) < 5;
         for (int i = 0; i < bodyFatIcons; i++) {
-            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, BODY_FAT_TEXTURE, x + i * 8, y, 9, 9);
+            context.drawGuiTexture(RenderLayer::getGuiTextured, BODY_FAT_TEXTURE, x + i * 8, y, 9, 9);
         }
         for (int i = bodyFatIcons; i < bodyFatIcons + fullMuscleIcons; i++) {
-            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, MUSCLE_FULL_TEXTURE, x + i * 8, y, 9, 9);
+            context.drawGuiTexture(RenderLayer::getGuiTextured, MUSCLE_FULL_TEXTURE, x + i * 8, y, 9, 9);
         }
         if (halfMuscle) {
-            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, MUSCLE_HALF_TEXTURE, x + (bodyFatIcons + fullMuscleIcons) * 8, y, 9, 9);
+            context.drawGuiTexture(RenderLayer::getGuiTextured, MUSCLE_HALF_TEXTURE, x + (bodyFatIcons + fullMuscleIcons) * 8, y, 9, 9);
         }
     }
 
@@ -77,10 +77,10 @@ public abstract class InGameHudMixin {
         int fullLiver = Math.round(liverValue / 10);
         boolean halfLiver = 1E-3 < (liverValue % 10) && (liverValue % 10) < 5;
         for (int i = 0; i < fullLiver; i++) {
-            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, LIVER_HEALTH_FULL_TEXTURE, x - i * 8, y, 9, 9);
+            context.drawGuiTexture(RenderLayer::getGuiTextured, LIVER_HEALTH_FULL_TEXTURE, x - i * 8, y, 9, 9);
         }
         if (halfLiver) {
-            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, LIVER_HEALTH_HALF_TEXTURE, x - fullLiver * 8, y, 9, 9);
+            context.drawGuiTexture(RenderLayer::getGuiTextured, LIVER_HEALTH_HALF_TEXTURE, x - fullLiver * 8, y, 9, 9);
         }
     }
 

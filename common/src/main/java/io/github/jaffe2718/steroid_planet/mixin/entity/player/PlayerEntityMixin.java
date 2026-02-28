@@ -23,8 +23,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
@@ -69,24 +67,24 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
         );
     }
 
-    @Inject(method = "readCustomData", at = @At("RETURN"))
-    private void readCustomData(ReadView view, CallbackInfo ci) {
+    @Inject(method = "readCustomDataFromNbt", at = @At("RETURN"))
+    private void readCustomData(NbtCompound nbt, CallbackInfo ci) {
         this.setBodyFat(0.0F);   // reset first
         this.setMuscle(0.0F);    // reset first
-        this.setMuscle(view.getFloat("Muscle", 0.0F));
-        this.setBodyFat(view.getFloat("BodyFat", 30.0F));
-        this.setLiverHealth(view.getFloat("LiverHealth", 100.0F));
-        this.steroid_planet$liverPoisoningTimer = view.getInt("LiverPoisoningTimer", 0);
-        this.steroid_planet$steroidUsingRecords = view.read("SteroidUsingRecords", NbtCompound.CODEC).orElse(new NbtCompound());
+        this.setMuscle(nbt.getFloat("Muscle", 0.0F));
+        this.setBodyFat(nbt.getFloat("BodyFat", 30.0F));
+        this.setLiverHealth(nbt.getFloat("LiverHealth", 100.0F));
+        this.steroid_planet$liverPoisoningTimer = nbt.getInt("LiverPoisoningTimer", 0);
+        this.steroid_planet$steroidUsingRecords = nbt.getCompoundOrEmpty("SteroidUsingRecords");
     }
 
-    @Inject(method = "writeCustomData", at = @At("RETURN"))
-    private void writeCustomData(WriteView view, CallbackInfo ci) {
-        view.putFloat("Muscle", this.getMuscle());
-        view.putFloat("LiverHealth", this.getLiverHealth());
-        view.putFloat("BodyFat", this.getBodyFat());
-        view.putInt("LiverPoisoningTimer", this.steroid_planet$liverPoisoningTimer);
-        view.put("SteroidUsingRecords", NbtCompound.CODEC, this.steroid_planet$steroidUsingRecords);
+    @Inject(method = "writeCustomDataToNbt", at = @At("RETURN"))
+    private void writeCustomData(NbtCompound nbt, CallbackInfo ci) {
+        nbt.putFloat("Muscle", this.getMuscle());
+        nbt.putFloat("LiverHealth", this.getLiverHealth());
+        nbt.putFloat("BodyFat", this.getBodyFat());
+        nbt.putInt("LiverPoisoningTimer", this.steroid_planet$liverPoisoningTimer);
+        nbt.put("SteroidUsingRecords", NbtCompound.CODEC, this.steroid_planet$steroidUsingRecords);
     }
 
     /**
