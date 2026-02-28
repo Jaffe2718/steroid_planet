@@ -7,15 +7,9 @@ package io.github.jaffe2718.steroid_planet.client.render.entity.state;
  */
 public interface PlayerEntityRenderStateExt {
 
-    void pectoralMuscleVisible(boolean visible);
-    boolean pectoralMuscleVisible();
+    void strong(boolean visible);
+    boolean strong();
 
-    void pectoralMuscleJecketVisible(boolean visible);
-    boolean pectoralMuscleJecketVisible();
-
-    void pointyHeadVisible(boolean visible);
-    boolean pointyHeadVisible();
-
-    void pointyHatVisible(boolean visible);
-    boolean pointyHatVisible();
+    void pointyHead(boolean visible);
+    boolean pointyHead();
 }

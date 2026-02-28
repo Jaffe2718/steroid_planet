@@ -12,8 +12,8 @@ public interface BipedEntityModelExt {
     Vector3f BASE_SCALE = new Vector3f(1.0F, 1.0F, 1.0F);
     Vector3f STRONG_SCALE = new Vector3f(1.3F, 1.0F, 1.3F);
 
-    ModelPart getPectoralMuscle();
-    ModelPart getPointyHead();
+    ModelPart getSteroid_planet$pectoralMuscle();
+    ModelPart getSteroid_planet$pointyHead();
     void strengthenArms();
     void resetArms();
 }

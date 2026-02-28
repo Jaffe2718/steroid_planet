@@ -11,54 +11,28 @@ import org.spongepowered.asm.mixin.Unique;
 public class PlayerEntityRenderStateMixin implements PlayerEntityRenderStateExt {
 
     @Unique
-    private boolean steroid_planet$pectoralMuscleVisible;
+    private boolean steroid_planet$strong;
 
     @Unique
-    private boolean steroid_planet$pectoralMuscleJecketVisible;
-
-    @Unique
-    private boolean steroid_planet$pointyHeadVisible;
-
-    @Unique
-    private boolean steroid_planet$pointyHatVisible;
+    private boolean steroid_planet$pointyHead;
 
     @Override
-    public void pectoralMuscleVisible(boolean visible) {
-        this.steroid_planet$pectoralMuscleVisible = visible;
+    public void strong(boolean visible) {
+        this.steroid_planet$strong = visible;
     }
 
     @Override
-    public boolean pectoralMuscleVisible() {
-        return this.steroid_planet$pectoralMuscleVisible;
+    public boolean strong() {
+        return this.steroid_planet$strong;
     }
 
     @Override
-    public void pectoralMuscleJecketVisible(boolean visible) {
-        this.steroid_planet$pectoralMuscleJecketVisible = visible;
+    public void pointyHead(boolean visible) {
+        this.steroid_planet$pointyHead = visible;
     }
 
     @Override
-    public boolean pectoralMuscleJecketVisible() {
-        return this.steroid_planet$pectoralMuscleJecketVisible;
-    }
-
-    @Override
-    public void pointyHeadVisible(boolean visible) {
-        this.steroid_planet$pointyHeadVisible = visible;
-    }
-
-    @Override
-    public boolean pointyHeadVisible() {
-        return this.steroid_planet$pointyHeadVisible;
-    }
-
-    @Override
-    public void pointyHatVisible(boolean visible) {
-        this.steroid_planet$pointyHatVisible = visible;
-    }
-
-    @Override
-    public boolean pointyHatVisible() {
-        return this.steroid_planet$pointyHatVisible;
+    public boolean pointyHead() {
+        return this.steroid_planet$pointyHead;
     }
 }

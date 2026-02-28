@@ -15,17 +15,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ArmorEntityModelMixin implements BipedEntityModelExt {
 
     @Unique
-    private ModelPart pectoralMuscle;
+    private ModelPart steroid_planet$pectoralMuscle;
 
     @Unique
-    private ModelPart pointyHead;
+    private ModelPart steroid_planet$pointyHead;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void constructor(ModelPart modelPart, CallbackInfo ci) {
-        this.pectoralMuscle = modelPart.getChild("body").getChild("pectoral_muscle");
-        this.pointyHead = modelPart.getChild("head").getChild("pointy_head");
-        this.pectoralMuscle.visible = false;
-        this.pointyHead.visible = false;
+        this.steroid_planet$pectoralMuscle = modelPart.getChild("body").getChild("pectoral_muscle");
+        this.steroid_planet$pointyHead = modelPart.getChild("head").getChild("pointy_head");
+        this.steroid_planet$pectoralMuscle.visible = false;
+        this.steroid_planet$pointyHead.visible = false;
     }
 
 
@@ -38,14 +38,14 @@ public abstract class ArmorEntityModelMixin implements BipedEntityModelExt {
 
     @Unique
     @Override
-    public ModelPart getPectoralMuscle() {
-        return this.pectoralMuscle;
+    public ModelPart getSteroid_planet$pectoralMuscle() {
+        return this.steroid_planet$pectoralMuscle;
     }
 
     @Unique
     @Override
-    public ModelPart getPointyHead() {
-        return this.pointyHead;
+    public ModelPart getSteroid_planet$pointyHead() {
+        return this.steroid_planet$pointyHead;
     }
 
     @Unique
