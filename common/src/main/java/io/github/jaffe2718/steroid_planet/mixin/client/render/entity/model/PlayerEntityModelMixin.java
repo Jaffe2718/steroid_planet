@@ -1,8 +1,9 @@
 package io.github.jaffe2718.steroid_planet.mixin.client.render.entity.model;
 
-import io.github.jaffe2718.steroid_planet.client.render.entity.model.BipedEntityModelExt;
+import io.github.jaffe2718.steroid_planet.client.render.entity.model.PlayerEntityModelExt;
 import io.github.jaffe2718.steroid_planet.client.render.entity.state.PlayerEntityRenderStateExt;
 import net.minecraft.client.model.*;
+import net.minecraft.client.render.entity.model.EquipmentModelData;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
 import org.spongepowered.asm.mixin.Final;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(PlayerEntityModel.class)
-public abstract class PlayerEntityModelMixin implements BipedEntityModelExt {
+public abstract class PlayerEntityModelMixin implements PlayerEntityModelExt {
 
     @Unique
     private ModelPart pectoralMuscle;
@@ -36,7 +37,7 @@ public abstract class PlayerEntityModelMixin implements BipedEntityModelExt {
     private boolean thinArms;
 
 
-    @Inject(method = "<init>", at = @At("CTOR_HEAD"))
+    @Inject(method = "<init>", at = @At("RETURN"))
     private void constructor(ModelPart root, boolean thinArms, CallbackInfo ci) {
         this.pectoralMuscle = root.getChild("body").getChild("pectoral_muscle");
         this.pectoralMuscleJacket = root.getChild("body").getChild("jacket").getChild("pectoral_muscle_jecket");
@@ -80,6 +81,17 @@ public abstract class PlayerEntityModelMixin implements BipedEntityModelExt {
         } else {
             this.resetArms();
         }
+    }
+
+    @Inject(method = "createEquipmentModelData", at = @At("RETURN"), cancellable = true)
+    private static void createEquipmentModelData(Dilation hatDilation, Dilation armorDilation,CallbackInfoReturnable<EquipmentModelData<ModelData>> cir) {
+        cir.setReturnValue(cir.getReturnValue().map(modelData -> {
+            modelData.getRoot().getChild("body").addChild("pectoral_muscle", ModelPartBuilder.create().uv(16, 16).cuboid(-4.0F, -0.5F, -2.0F, 8.0F, 7.0F, 4.0F, armorDilation.add(2.0F, 0.0F, 1.5F)), ModelTransform.NONE);
+            modelData.getRoot().getChild("body").getChild("jacket").addChild("pectoral_muscle_jecket", ModelPartBuilder.create(), ModelTransform.NONE);
+            modelData.getRoot().getChild("head").addChild("pointy_head", ModelPartBuilder.create().uv(8, 2).cuboid(-1.0F, -9.5F, -1.0F, 2.0F, 2.0F, 2.0F, armorDilation), ModelTransform.NONE);
+            modelData.getRoot().getChild("head").getChild("hat").addChild("pointy_hat", ModelPartBuilder.create(), ModelTransform.NONE);
+            return modelData;
+        }));
     }
 
     @Unique

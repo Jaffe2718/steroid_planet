@@ -139,7 +139,7 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
             this.lossBodyFat(fatLoss);
             ModCriteria.HEALTH_CONDITION.trigger(serverPlayer);
         }
-        if (((PlayerEntity) (Object) this).getWorld().getDifficulty() == Difficulty.PEACEFUL) {
+        if (((PlayerEntity) (Object) this).getEntityWorld().getDifficulty() == Difficulty.PEACEFUL) {
             this.gainLiverHealth(1.0F);
         }
         this.applyLiverPoisoning();
@@ -159,7 +159,7 @@ public abstract class PlayerEntityMixin implements PlayerEntityExt {
             this.steroid_planet$liverPoisoningTimer--;
         }
         if (this.steroid_planet$liverPoisoningTimer == 0 && this.getLiverHealth() < HealthConditionCriterion.LIVER_HEALTH_THRESHOLD
-                && thiz.getWorld() instanceof ServerWorld serverWorld
+                && thiz.getEntityWorld() instanceof ServerWorld serverWorld
         ) {
             thiz.damage(
                     serverWorld,

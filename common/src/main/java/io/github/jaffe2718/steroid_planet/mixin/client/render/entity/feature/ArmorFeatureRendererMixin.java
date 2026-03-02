@@ -1,11 +1,11 @@
 package io.github.jaffe2718.steroid_planet.mixin.client.render.entity.feature;
 
-import io.github.jaffe2718.steroid_planet.client.render.entity.model.BipedEntityModelExt;
+import io.github.jaffe2718.steroid_planet.client.render.entity.model.PlayerEntityModelExt;
 import io.github.jaffe2718.steroid_planet.client.render.entity.state.PlayerEntityRenderStateExt;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
-import net.minecraft.client.render.entity.model.ArmorEntityModel;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.render.entity.state.BipedEntityRenderState;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
@@ -27,17 +27,17 @@ public abstract class ArmorFeatureRendererMixin<S extends BipedEntityRenderState
 
     @SuppressWarnings("AmbiguousMixinReference")
     @Inject(method = "render", at = @At("HEAD"))
-    private void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, S bipedEntityRenderState, float f, float g, CallbackInfo ci) {
+    private void render(MatrixStack matrixStack, OrderedRenderCommandQueue orderedRenderCommandQueue, int i, S bipedEntityRenderState, float f, float g, CallbackInfo ci) {
         if (bipedEntityRenderState instanceof PlayerEntityRenderState playerState) {
             PlayerEntityRenderStateExt stateExt = (PlayerEntityRenderStateExt) playerState;
-            if (this.getModel(bipedEntityRenderState, EquipmentSlot.HEAD) instanceof ArmorEntityModel<?> armorModel) {
-                BipedEntityModelExt helmetModel = (BipedEntityModelExt) armorModel;
+            if (this.getModel(bipedEntityRenderState, EquipmentSlot.HEAD) instanceof PlayerEntityModel armorModel) {
+                PlayerEntityModelExt helmetModel = (PlayerEntityModelExt) armorModel;
                 EquippableComponent equippableComponent = bipedEntityRenderState.equippedHeadStack.get(DataComponentTypes.EQUIPPABLE);
                 helmetModel.getPointyHead().visible = equippableComponent != null
                         && steroid_planet$hasModel(equippableComponent, EquipmentSlot.HEAD) && stateExt.pointyHead();
             }
-            if (this.getModel(bipedEntityRenderState, EquipmentSlot.CHEST) instanceof ArmorEntityModel<?> armorModel) {
-                BipedEntityModelExt chestplateModel = (BipedEntityModelExt) armorModel;
+            if (this.getModel(bipedEntityRenderState, EquipmentSlot.CHEST) instanceof PlayerEntityModel armorModel) {
+                PlayerEntityModelExt chestplateModel = (PlayerEntityModelExt) armorModel;
                 EquippableComponent equippableComponent = bipedEntityRenderState.equippedChestStack.get(DataComponentTypes.EQUIPPABLE);
                 chestplateModel.getPectoralMuscle().visible = equippableComponent != null
                         && steroid_planet$hasModel(equippableComponent, EquipmentSlot.CHEST) && stateExt.strong();

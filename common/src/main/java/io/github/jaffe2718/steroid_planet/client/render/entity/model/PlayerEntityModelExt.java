@@ -5,9 +5,9 @@ import org.joml.Vector3f;
 
 /**
  * Extension interface for {@link net.minecraft.client.render.entity.model.BipedEntityModel}.
- * @see io.github.jaffe2718.steroid_planet.mixin.client.render.entity.model.ArmorEntityModelMixin
+ * @see io.github.jaffe2718.steroid_planet.mixin.client.render.entity.model.PlayerEntityModelMixin
  */
-public interface BipedEntityModelExt {
+public interface PlayerEntityModelExt {
 
     Vector3f BASE_SCALE = new Vector3f(1.0F, 1.0F, 1.0F);
     Vector3f STRONG_SCALE = new Vector3f(1.3F, 1.0F, 1.3F);
