@@ -6,5 +6,4 @@
 
 | Minecraft | Fabric                                                                                     | NeoForge                                                                                     |
 |-----------|--------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|
-| 1.21.9    | [Architectury API 18.0.3](https://modrinth.com/mod/architectury-api/version/18.0.3+fabric) | [Architectury API 18.0.3](https://modrinth.com/mod/architectury-api/version/18.0.3+neoforge) |
-| 1.21.10   | [Architectury API 18.0.5](https://modrinth.com/mod/architectury-api/version/18.0.5+fabric) | [Architectury API 18.0.5](https://modrinth.com/mod/architectury-api/version/18.0.5+neoforge) |
+| 1.21.11   | [Architectury API 19.0.1](https://modrinth.com/mod/architectury-api/version/19.0.1+fabric) | [Architectury API 19.0.1](https://modrinth.com/mod/architectury-api/version/19.0.1+neoforge) |
