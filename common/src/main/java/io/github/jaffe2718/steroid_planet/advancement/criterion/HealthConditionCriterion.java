@@ -24,25 +24,28 @@ public class HealthConditionCriterion extends AbstractCriterion<HealthConditionC
         float playerLiverHealth = ((PlayerEntityExt) player).getLiverHealth();
         float playerMuscle = ((PlayerEntityExt) player).getMuscle();
         float playerBodyFat = ((PlayerEntityExt) player).getBodyFat();
-        this.trigger(player, (conditions) -> conditions.matches(playerLiverHealth, playerMuscle, playerBodyFat));
+        boolean useSteroid = !((PlayerEntityExt) player).querySteroids().isEmpty();
+        this.trigger(player, (conditions) -> conditions.matches(playerLiverHealth, playerMuscle, playerBodyFat, useSteroid));
     }
 
-    public record Conditions(Optional<LootContextPredicate> player, Optional<Float> minLiverHealth, Optional<Float> maxMuscle, Optional<Float> maxBodyFat) implements AbstractCriterion.Conditions {
+    public record Conditions(Optional<LootContextPredicate> player, Optional<Float> minLiverHealth, Optional<Float> maxMuscle, Optional<Float> maxBodyFat, Optional<Boolean> useSteroid) implements AbstractCriterion.Conditions {
         public static final Codec<HealthConditionCriterion.Conditions> CODEC = RecordCodecBuilder.create(
                 (instance) -> instance
                         .group(
                                 EntityPredicate.LOOT_CONTEXT_PREDICATE_CODEC.optionalFieldOf("player").forGetter(HealthConditionCriterion.Conditions::player),
                                 Codec.FLOAT.optionalFieldOf("liver_health").forGetter(HealthConditionCriterion.Conditions::minLiverHealth),
                                 Codec.FLOAT.optionalFieldOf("muscle").forGetter(HealthConditionCriterion.Conditions::maxMuscle),
-                                Codec.FLOAT.optionalFieldOf("body_fat").forGetter(HealthConditionCriterion.Conditions::maxBodyFat)
+                                Codec.FLOAT.optionalFieldOf("body_fat").forGetter(HealthConditionCriterion.Conditions::maxBodyFat),
+                                Codec.BOOL.optionalFieldOf("use_steroid").forGetter(HealthConditionCriterion.Conditions::useSteroid)
                         )
                         .apply(instance, HealthConditionCriterion.Conditions::new)
         );
         
-        public boolean matches(float liverHealth, float muscle, float bodyFat) {
+        public boolean matches(float liverHealth, float muscle, float bodyFat, boolean useSteroid) {
             return minLiverHealth.map(threshold -> liverHealth < threshold).orElse(true)
                     && this.maxMuscle.map(threshold -> muscle >= threshold).orElse(true)
-                    && this.maxBodyFat.map(threshold -> bodyFat < threshold).orElse(true);
+                    && this.maxBodyFat.map(threshold -> bodyFat < threshold).orElse(true)
+                    && this.useSteroid.map(use -> use == useSteroid).orElse(true);
         }
     }
 }
