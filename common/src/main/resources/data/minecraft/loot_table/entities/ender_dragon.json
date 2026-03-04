@@ -17,6 +17,10 @@
                 {
                     "type": "minecraft:item",
                     "name": "steroid_planet:trenbolone"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "steroid_planet:champion_trophy"
                 }
             ],
             "functions": [
