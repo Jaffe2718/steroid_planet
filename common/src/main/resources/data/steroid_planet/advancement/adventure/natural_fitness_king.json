@@ -1,0 +1,33 @@
+{
+    "parent": "steroid_planet:adventure/bodybuilding_champion",
+
+    "criteria": {
+        "natural_muscle_90": {
+            "trigger": "steroid_planet:health_condition",
+            "conditions": {
+                "muscle": 90.0,
+                "use_steroid": false
+            }
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.steroid_planet.adventure.natural_fitness_king.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:chicken"
+        },
+        "title": {
+            "translate": "advancements.steroid_planet.adventure.natural_fitness_king.title"
+        },
+        "frame": "challenge",
+        "show_toast": true
+    },
+    "requirements": [
+        [
+            "natural_muscle_90"
+        ]
+    ],
+    "sends_telemetry_event": true
+}
