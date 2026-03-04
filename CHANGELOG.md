@@ -1,6 +1,7 @@
 ## Changelog
 
-- first release
+- fix: loot table of `steroid_planet:champion_trophy`
+- new: advancement `steroid_planet:adventure/natural_fitness_king`
 
 ## Dependencies
 
