@@ -20,7 +20,7 @@
         "title": {
             "translate": "advancements.steroid_planet.adventure.bodybuilding_champion.title"
         },
-        "frame": "challenge",
+        "frame": "goal",
         "show_toast": true
     },
     "requirements": [
